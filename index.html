@@ -82,6 +82,7 @@
       /* Build / Break switch: counter, capsule with sliding thumb, scroll progress */
       .x-bar { position: sticky; top: calc(env(safe-area-inset-top, 0px) + 10px); z-index: 20; justify-self: center; max-width: 100%; display: flex; align-items: center; gap: 8px; padding: 4px; border-radius: var(--r-pill); border: 1px solid transparent; transition: background var(--dur-quick) var(--ease-out), border-color var(--dur-quick) var(--ease-out), box-shadow var(--dur-quick) var(--ease-out); }
       .x-bar.is-stuck { background: color-mix(in srgb, var(--fill-primary-on) 70%, transparent); -webkit-backdrop-filter: var(--hark-blur); backdrop-filter: var(--hark-blur); border-color: var(--stroke-secondary); box-shadow: var(--hark-shadow); }
+      @media (max-width: 599px) { .x-bar.is-stuck { background: none; -webkit-backdrop-filter: none; backdrop-filter: none; border-color: transparent; box-shadow: none; } }
       .x-count { display: inline-flex; align-items: center; gap: 4px; padding-left: 6px; font: var(--weight-regular) var(--size-caption)/1 var(--x-mono); color: var(--text-secondary); letter-spacing: 0.04em; font-variant-numeric: tabular-nums; white-space: nowrap; }
       .x-odo { display: inline-block; height: 1.2em; overflow: hidden; color: var(--text-primary); }
       .x-odo__col { display: block; transition: transform 560ms cubic-bezier(0.34, 1.56, 0.64, 1); }
@@ -207,10 +208,10 @@
       .x-stat__label { font: var(--weight-regular) var(--size-caption)/var(--lh) var(--x-mono); color: var(--text-secondary); text-transform: uppercase; letter-spacing: 0.02em; }
       @container (min-width: 640px) { .x-stats { grid-template-columns: repeat(4, minmax(0, 1fr)); } }
 
-      /* Section header: pill label left, big title right */
-      .x-head { display: flex; flex-wrap: wrap; align-items: end; justify-content: space-between; gap: 16px; padding-block: 0 clamp(24px, 4cqi, 40px); }
+      /* Section header: pill label on top, big title below, both flush left */
+      .x-head { display: flex; flex-direction: column; align-items: flex-start; justify-content: flex-start; gap: 16px; padding-block: 0 clamp(24px, 4cqi, 40px); text-align: left; }
       .x-head h2 { font: var(--weight-bold) clamp(40px, 8cqi, 80px)/0.95 var(--sans); letter-spacing: -0.04em; }
-      .x-head__sub { flex-basis: 100%; color: var(--text-secondary); font-size: var(--size-body); }
+      .x-head__sub { flex-basis: auto; color: var(--text-secondary); font-size: var(--size-body); }
 
       /* Filter chips */
       .x-filters { display: flex; flex-wrap: wrap; gap: 8px; margin-bottom: 24px; }
