@@ -367,18 +367,17 @@
       /* ---------- Motion ---------- */
       /* Sidebar identity: hidden beside the Build hero on desktop, slides in once the hero is gone */
       @media (min-width: 1024px) {
-        .x-sid .x-side__id { max-height: 190px; opacity: 1; transition: max-height 620ms cubic-bezier(0.22, 1, 0.36, 1), margin-bottom 620ms cubic-bezier(0.22, 1, 0.36, 1), opacity 420ms ease 80ms, visibility 0s linear 0s; }
-        .x-sid .x-side__id > * { transition: opacity 520ms ease, transform 620ms cubic-bezier(0.22, 1, 0.36, 1), filter 520ms ease; }
-        .x-sid .x-side__id .x-side__avatar { transition-delay: 60ms; }
-        .x-sid .x-side__id .x-label { transition-delay: 140ms; }
-        .x-sid .x-side__id .x-side__name { transition: opacity 520ms ease 210ms, transform 620ms cubic-bezier(0.22, 1, 0.36, 1) 210ms, filter 520ms ease 210ms; }
+        .x-sid .x-side__id { max-height: var(--idh, 200px); opacity: 1; transition: max-height 900ms cubic-bezier(0.65, 0, 0.35, 1), margin-bottom 900ms cubic-bezier(0.65, 0, 0.35, 1), visibility 0s linear 0s; }
+        .x-sid.is-id-anim .x-side__id { overflow: clip; overflow-clip-margin: 60px; }
+        .x-sid .x-side__id .x-side__avatar { transition: opacity 700ms ease 260ms, transform 1000ms cubic-bezier(0.16, 1, 0.3, 1) 260ms, filter 700ms ease 260ms; }
         .x-sid .x-side__id > div { transition: none; }
-        .x-sid .x-side__id .x-label { transition: opacity 520ms ease 140ms, transform 620ms cubic-bezier(0.22, 1, 0.36, 1) 140ms, filter 520ms ease 140ms; }
-        .x-sid.is-id-off .x-side__id { max-height: 0; margin-bottom: -22px; opacity: 0; visibility: hidden; transition: max-height 520ms cubic-bezier(0.22, 1, 0.36, 1) 120ms, margin-bottom 520ms cubic-bezier(0.22, 1, 0.36, 1) 120ms, opacity 320ms ease, visibility 0s linear 640ms; }
-        .x-sid.is-id-off .x-side__id .x-side__avatar { opacity: 0; transform: scale(0.82) translateY(10px); filter: blur(6px); transition-delay: 0ms; }
-        .x-sid.is-id-off .x-side__id .x-label, .x-sid.is-id-off .x-side__id .x-side__name { opacity: 0; transform: translateY(12px); filter: blur(4px); transition-delay: 0ms; }
-        .x-sid.is-id-anim .x-side__id { overflow: clip; overflow-clip-margin: 48px; }
-        .x-sid.is-id-still .x-side__id, .x-sid.is-id-still .x-side__id > *, .x-sid.is-id-still .x-side__id .x-label, .x-sid.is-id-still .x-side__id .x-side__name { transition: none; }
+        .x-sid .x-side__id .x-label { transition: opacity 700ms ease 420ms, transform 1000ms cubic-bezier(0.16, 1, 0.3, 1) 420ms, filter 700ms ease 420ms; }
+        .x-sid .x-side__id .x-side__name { transition: opacity 700ms ease 540ms, transform 1000ms cubic-bezier(0.16, 1, 0.3, 1) 540ms, filter 700ms ease 540ms; }
+        .x-sid.is-id-off .x-side__id { max-height: 0; margin-bottom: -22px; visibility: hidden; transition: max-height 800ms cubic-bezier(0.65, 0, 0.35, 1) 300ms, margin-bottom 800ms cubic-bezier(0.65, 0, 0.35, 1) 300ms, visibility 0s linear 1100ms; }
+        .x-sid.is-id-off .x-side__id .x-side__name { opacity: 0; transform: translateY(-10px); filter: blur(6px); transition: opacity 420ms ease 0ms, transform 600ms cubic-bezier(0.65, 0, 0.35, 1) 0ms, filter 420ms ease 0ms; }
+        .x-sid.is-id-off .x-side__id .x-label { opacity: 0; transform: translateY(-10px); filter: blur(6px); transition: opacity 420ms ease 90ms, transform 600ms cubic-bezier(0.65, 0, 0.35, 1) 90ms, filter 420ms ease 90ms; }
+        .x-sid.is-id-off .x-side__id .x-side__avatar { opacity: 0; transform: scale(0.85) translateY(-6px); filter: blur(8px); transition: opacity 480ms ease 170ms, transform 700ms cubic-bezier(0.65, 0, 0.35, 1) 170ms, filter 480ms ease 170ms; }
+        .x-sid.is-id-still .x-side__id, .x-sid.is-id-still .x-side__id .x-side__avatar, .x-sid.is-id-still .x-side__id .x-label, .x-sid.is-id-still .x-side__id .x-side__name { transition: none; }
       }
       /* Sidebar nav: one accent indicator that slides to the active or hovered link */
       .x-side__nav { position: relative; }
@@ -950,10 +949,11 @@
           if (side.classList.contains("is-id-off") === off) return;
           side.classList.add("is-id-anim"); clearTimeout(idT);
           side.classList.toggle("is-id-off", off);
-          idT = setTimeout(function () { side.classList.remove("is-id-anim"); }, 340);
+          idT = setTimeout(function () { side.classList.remove("is-id-anim"); }, 1600);
         }
         if (side && hero && "IntersectionObserver" in window) {
           side.classList.add("x-sid", "is-id-still");
+          var idEl = side.querySelector(".x-side__id"); var measureId = function () { if (idEl) side.style.setProperty("--idh", idEl.scrollHeight + "px"); }; measureId(); window.addEventListener("resize", measureId); window.addEventListener("load", measureId);
           var hr = hero.getBoundingClientRect();
           setId(!pages.build.hidden && hr.bottom > 120 && hr.top < window.innerHeight);
           requestAnimationFrame(function () { requestAnimationFrame(function () { side.classList.remove("is-id-still"); }); });
