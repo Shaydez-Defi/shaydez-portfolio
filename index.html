@@ -170,7 +170,7 @@
       .x-meta span { display: inline-flex; align-items: center; gap: 8px; padding: 6px 12px; border-radius: var(--r-pill); border: 1px solid var(--stroke-primary); font: var(--weight-regular) var(--size-caption)/var(--lh) var(--x-mono); color: var(--text-secondary); }
       .x-meta span::before { content: ""; width: 7px; height: 7px; border-radius: 50%; background: var(--text-secondary); flex: none; }
       .x-meta .x-live::before { content: none; display: none; }
-      .x-hero__statement { font: var(--weight-medium) clamp(20px, 3cqi, 28px)/1.2 var(--sans); letter-spacing: -0.01em; margin: 20px 0 22px; max-width: 26ch; }
+      .x-hero__statement { font: var(--weight-medium) clamp(20px, 3cqi, 28px)/1.2 var(--sans); letter-spacing: -0.01em; margin: 20px 0 0; max-width: 26ch; }
       .x-hero__statement em { font-style: normal; color: var(--x-accent); }
       @container (min-width: 640px) { .x-hero { grid-template-columns: minmax(200px, 0.8fr) minmax(0, 1.2fr); gap: clamp(24px, 4cqi, 48px); } .x-hero__frame { width: 100%; } .x-hero--solo { grid-template-columns: minmax(0, 1fr); } }
       .x-hero { overflow: visible; }
@@ -208,10 +208,12 @@
       .x-stat__label { font: var(--weight-regular) var(--size-caption)/var(--lh) var(--x-mono); color: var(--text-secondary); text-transform: uppercase; letter-spacing: 0.02em; }
       @container (min-width: 640px) { .x-stats { grid-template-columns: repeat(4, minmax(0, 1fr)); } }
 
-      /* Section header: pill label on top, big title below, both flush left */
-      .x-head { display: flex; flex-direction: column; align-items: flex-start; justify-content: flex-start; gap: 16px; padding-block: 0 clamp(24px, 4cqi, 40px); text-align: left; }
-      .x-head h2 { font: var(--weight-bold) clamp(40px, 8cqi, 80px)/0.95 var(--sans); letter-spacing: -0.04em; }
-      .x-head__sub { flex-basis: auto; color: var(--text-secondary); font-size: var(--size-body); }
+      /* Section header: big title left, pill label right on one row, centred; intro below */
+      .x-head { display: flex; flex-wrap: wrap; align-items: center; justify-content: space-between; gap: 16px; padding-block: 0 clamp(24px, 4cqi, 40px); text-align: left; }
+      .x-head h2 { font: var(--weight-bold) clamp(40px, 8cqi, 80px)/0.95 var(--sans); letter-spacing: -0.04em; flex: 1 1 0; min-width: min-content; margin: 0; }
+      .x-head > .x-tag { flex: none; margin: 0 0 0 auto; white-space: nowrap; }
+      .x-head__sub { flex: 1 0 100%; margin: 0; color: var(--text-secondary); font-size: var(--size-body); }
+      .x-contact .x-head { padding-block: 0; }
 
       /* Filter chips */
       .x-filters { display: flex; flex-wrap: wrap; gap: 8px; margin-bottom: 24px; }
@@ -276,7 +278,7 @@
       .x-contact__row { display: flex; flex-wrap: wrap; align-items: end; justify-content: space-between; gap: 24px; padding-top: 24px; border-top: 1px solid var(--stroke-secondary); }
 
       /* Findings ledger */
-      .x-ledger-card h2 { font: var(--weight-bold) clamp(34px, 6cqi, 64px)/1 var(--sans); letter-spacing: -0.04em; margin-bottom: clamp(24px, 4cqi, 40px); }
+      .x-ledger-card h2 { font: var(--weight-bold) clamp(34px, 6cqi, 64px)/1 var(--sans); letter-spacing: -0.04em; margin: 0; }
       .x-ledger-card .table-wrap { margin-inline: 0; padding-inline: 0; }
       .x-ledger td, .x-ledger th { white-space: nowrap; }
       .x-ledger thead th { font: var(--weight-regular) var(--size-caption)/var(--lh) var(--x-mono); text-transform: uppercase; letter-spacing: 0.02em; }
@@ -367,7 +369,6 @@
             <h1 id="hero-title">Shaydez</h1>
             <p class="x-meta"><span class="x-live">Open to work &amp; audits</span></p>
             <p class="x-hero__statement">I build onchain products and <em>break</em> onchain code.</p>
-            <a class="x-cta" href="mailto:shaydyting@gmail.com"><span class="x-pill x-pill--red">Hire me</span><span class="x-arrow" aria-hidden="true"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12h14M13 6l6 6-6 6"/></svg></span></a>
           </div>
         </section>
 
@@ -395,8 +396,8 @@
 
         <section class="x-sec" id="builds" aria-labelledby="builds-title">
           <div class="x-head">
-            <p class="x-tag x-tag--label">Selected work</p>
             <h2 id="builds-title">Builds</h2>
+            <p class="x-tag x-tag--label">Selected work</p>
             <p class="x-head__sub">Five live apps, each on a different chain. Every one is deployed and open source.</p>
           </div>
           <div class="x-filters" role="group" aria-label="Filter builds">
@@ -479,8 +480,8 @@
 
         <section class="x-sec" id="stack" aria-labelledby="stack-title">
           <div class="x-head">
-            <p class="x-tag x-tag--label">My toolkit</p>
             <h2 id="stack-title">Stack</h2>
+            <p class="x-tag x-tag--label">My toolkit</p>
           </div>
           <ul class="x-kit">
             <li tabindex="0" style="--brand: #8C8C8C"><span class="x-kit__logo"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M4.409 6.608L7.981.255l3.572 6.353H4.409zM8.411 0l3.569 6.348L15.552 0H8.411zm4.036 17.392l3.572 6.354 3.575-6.354h-7.147zm-.608-10.284h-7.43l3.715 6.605 3.715-6.605zm.428-.25h7.428L15.982.255l-3.715 6.603zM15.589 24l-3.569-6.349L8.448 24h7.141zm-3.856-6.858H4.306l3.712 6.603 3.715-6.603zm.428-.25h7.433l-3.718-6.605-3.715 6.605z"/></svg></span><span class="x-kit__name">Solidity</span></li>
@@ -498,8 +499,10 @@
         </section>
 
         <section class="x-card x-contact x-sec" id="contact" aria-labelledby="contact-title">
-          <p class="x-tag x-tag--label" style="justify-self: start">Contact</p>
-          <h2 id="contact-title">Building something onchain, or want your contracts looked at?</h2>
+          <div class="x-head">
+            <h2 id="contact-title">Building something onchain, or want your contracts looked at?</h2>
+            <p class="x-tag x-tag--label">Contact</p>
+          </div>
           <div class="x-contact__row">
             <ul class="x-icons" aria-label="Contact links">
               <li><a class="x-icon" href="mailto:shaydyting@gmail.com" aria-label="Email shaydyting@gmail.com" title="Email · shaydyting@gmail.com"><span class="x-icon__disc"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><rect x="3" y="5" width="18" height="14" rx="2"/><path d="m3.5 7 8.5 6 8.5-6"/></svg></span><span class="x-icon__cap">email</span></a></li>
@@ -522,7 +525,6 @@
             <h1 id="breaks-title">Breaks</h1>
             <p class="x-meta"><span class="x-live">Open to work &amp; audits</span><span>Direct disclosure only</span></p>
             <p class="x-hero__statement">Independent smart-contract security research. Disclosed directly to teams.</p>
-            <a class="x-cta" href="mailto:shaydyting@gmail.com"><span class="x-pill x-pill--red">Hire me</span><span class="x-arrow" aria-hidden="true"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12h14M13 6l6 6-6 6"/></svg></span></a>
           </div>
         </section>
 
@@ -538,8 +540,10 @@
         </section>
 
         <section class="x-card x-ledger-card" aria-labelledby="ledger-title">
-          <p class="x-tag x-tag--label" style="margin-bottom: 14px">Ledger</p>
-          <h2 id="ledger-title">Findings ledger.</h2>
+          <div class="x-head">
+            <h2 id="ledger-title">Findings ledger.</h2>
+            <p class="x-tag x-tag--label">Ledger</p>
+          </div>
           <div class="table-wrap">
             <table class="x-ledger">
               <thead>
@@ -576,8 +580,10 @@
         </section>
 
         <section class="x-card x-contact" id="contact-break" aria-labelledby="contact-break-title" style="margin-top: 0">
-          <p class="x-tag x-tag--label" style="justify-self: start">Contact</p>
-          <h2 id="contact-break-title">Building something onchain, or want your contracts looked at?</h2>
+          <div class="x-head">
+            <h2 id="contact-break-title">Building something onchain, or want your contracts looked at?</h2>
+            <p class="x-tag x-tag--label">Contact</p>
+          </div>
           <div class="x-contact__row">
             <ul class="x-icons" aria-label="Contact links">
               <li><a class="x-icon" href="mailto:shaydyting@gmail.com" aria-label="Email shaydyting@gmail.com" title="Email · shaydyting@gmail.com"><span class="x-icon__disc"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><rect x="3" y="5" width="18" height="14" rx="2"/><path d="m3.5 7 8.5 6 8.5-6"/></svg></span><span class="x-icon__cap">email</span></a></li>
