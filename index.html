@@ -3,8 +3,13 @@
   <head>
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1" />
-    <title>Shaydez Portfolio</title>
+    <title>Shaydez — Build / Break</title>
     <meta name="description" content="Shaydez builds onchain products and breaks onchain code. Full-stack Web3 developer and independent smart-contract security researcher." />
+    <meta property="og:title" content="Shaydez — Build / Break" />
+    <meta name="twitter:title" content="Shaydez — Build / Break" />
+    <link rel="icon" type="image/png" sizes="32x32" href="favicon-32.png" />
+    <link rel="icon" type="image/png" sizes="192x192" href="favicon-192.png" />
+    <link rel="apple-touch-icon" sizes="180x180" href="apple-touch-icon.png" />
     <link rel="preconnect" href="https://fonts.googleapis.com" />
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
     <link
@@ -13,6 +18,16 @@
     />
     <link rel="stylesheet" href="hark.css" />
     <link rel="stylesheet" href="hark-hero.css" />
+    <script>
+      // Motion runs only with JS, IntersectionObserver and no reduced-motion preference
+      (function () {
+        var d = document.documentElement;
+        if (!("IntersectionObserver" in window) || window.matchMedia("(prefers-reduced-motion: reduce)").matches) return;
+        d.classList.add("x-motion");
+        // safety net: if the reveal script never starts, show everything
+        setTimeout(function () { if (!window.__xReveal) d.classList.remove("x-motion"); }, 3000);
+      })();
+    </script>
     <style>
       :root {
         --page-max: 1360px;
@@ -295,7 +310,7 @@
       .x-kit__logo { display: grid; place-items: center; width: clamp(36px, 6cqi, 52px); height: clamp(36px, 6cqi, 52px); transition: color var(--dur-quick) var(--ease-out), transform var(--dur-quick) var(--ease-out); }
       .x-kit__logo svg, .x-kit__logo img { display: block; width: 100%; height: 100%; object-fit: contain; fill: currentColor; }
       .x-kit__logo--wide { width: clamp(72px, 11cqi, 100px); }
-      .x-kit li:hover .x-kit__logo, .x-kit li:focus-visible .x-kit__logo { color: var(--brand, var(--text-primary)); transform: translateY(-3px) scale(1.06); }
+      .x-kit li:hover .x-kit__logo, .x-kit li:focus-visible .x-kit__logo { color: var(--brand, var(--text-primary)); transform: translateY(-2px); }
       .x-kit__name { max-width: 100%; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; font: var(--weight-regular) var(--size-caption)/1.2 var(--x-mono); color: var(--text-secondary); transition: color var(--dur-quick) var(--ease-out); }
       .x-kit li:hover .x-kit__name { color: var(--text-primary); }
       :root[data-theme="light"] .x-kit__logo img { filter: invert(1); }
@@ -349,6 +364,68 @@
       .x-toast { position: fixed; left: 50%; bottom: calc(env(safe-area-inset-bottom, 0px) + 24px); z-index: 50; transform: translate(-50%, 12px); padding: 10px 16px; border-radius: var(--r-pill); background: var(--fill-primary); color: var(--text-primary-on); font: var(--weight-regular) var(--size-caption)/var(--lh) var(--x-mono); box-shadow: var(--hark-shadow); opacity: 0; pointer-events: none; transition: opacity var(--dur-quick) var(--ease-out), transform var(--dur-quick) var(--ease-out); white-space: nowrap; }
       .x-toast.is-on { opacity: 1; transform: translate(-50%, 0); }
       @media (prefers-reduced-motion: reduce) { .x-row, .x-row__shot img, .x-arrow, .x-icon__disc { transition: none; } .x-row:hover, .x-row:hover .x-row__shot img { transform: none; } }
+      /* ---------- Motion ---------- */
+      /* Sidebar identity: hidden beside the Build hero on desktop, slides in once the hero is gone */
+      @media (min-width: 1024px) {
+        .x-sid .x-side__id { max-height: 260px; transition: opacity 300ms var(--ease-out), transform 300ms var(--ease-out), max-height 300ms var(--ease-out), margin-bottom 300ms var(--ease-out), visibility 0s linear 0s; }
+        .x-sid.is-id-off .x-side__id { max-height: 0; margin-bottom: -22px; opacity: 0; transform: translateY(8px); visibility: hidden; transition: opacity 300ms var(--ease-out), transform 300ms var(--ease-out), max-height 300ms var(--ease-out), margin-bottom 300ms var(--ease-out), visibility 0s linear 300ms; }
+        .x-sid.is-id-anim .x-side__id { overflow: clip; overflow-clip-margin: 48px; }
+        .x-sid.is-id-still .x-side__id { transition: none; }
+      }
+      /* Sidebar nav: one accent indicator that slides to the active or hovered link */
+      .x-side__nav { position: relative; }
+      .x-side__ind { display: none; }
+      .x-side__nav.x-ind .x-side__ind { display: block; position: absolute; left: 0; top: 0; width: 2px; height: var(--tap); border-radius: 1px; background: var(--x-accent); pointer-events: none; transform: translateY(var(--y, 0px)); transition: transform 300ms var(--ease-out), opacity var(--dur-quick) var(--ease-out); }
+      .x-side__nav.x-ind .x-side__ind.is-peek { opacity: 0.45; }
+      .x-side__nav.x-ind a.is-active { box-shadow: none; }
+      .x-side__nav a { transform-origin: left center; transition: color var(--dur-quick) var(--ease-out), box-shadow var(--dur-quick) var(--ease-out), transform var(--dur-quick) var(--ease-out); }
+      .x-side__nav a:active { transform: scale(0.96); }
+
+      /* Hover: soft brightness on pills and filter chips; quick press on tap */
+      .x-pill, .x-filters button { transition: background var(--dur-quick) var(--ease-out), border-color var(--dur-quick) var(--ease-out), color var(--dur-quick) var(--ease-out), transform var(--dur-quick) var(--ease-out), filter var(--dur-quick) var(--ease-out); }
+      .x-pill:hover, .x-filters button:hover, .x-cta:hover > .x-pill { filter: brightness(1.12); }
+      .x-pill:active, .x-filters button:active, .x-cta:active > .x-pill, .x-arrow:active { transform: scale(0.96); }
+      .x-turn .btn { transition: box-shadow var(--dur-quick) ease, transform var(--dur-quick) var(--ease-out); }
+      .x-turn .btn:active { transform: scale(0.96); }
+      .x-icon__disc { transition: color var(--dur-quick) var(--ease-out), border-color var(--dur-quick) var(--ease-out), transform var(--dur-quick) var(--ease-out), box-shadow var(--dur-quick) var(--ease-out); }
+      .x-icon:hover .x-icon__disc, .x-icon:focus-visible .x-icon__disc { box-shadow: 0 0 0 4px color-mix(in srgb, var(--x-accent) 16%, transparent); }
+      .x-icon:active .x-icon__disc { transform: translateY(-1px) scale(0.96); }
+      .x-kit__logo { opacity: 0.85; transition: color var(--dur-quick) var(--ease-out), transform var(--dur-quick) var(--ease-out), opacity var(--dur-quick) var(--ease-out); }
+      .x-kit li:hover .x-kit__logo, .x-kit li:focus-visible .x-kit__logo { opacity: 1; }
+      /* Project rows: soft highlight, screenshot lifts in its frame while the image zooms */
+      .x-row { isolation: isolate; }
+      .x-row::before { content: ""; position: absolute; inset: 0; z-index: -1; border-radius: var(--r-s); background: linear-gradient(to right, var(--fill-tertiary), transparent 85%); opacity: 0; pointer-events: none; transition: opacity 300ms var(--ease-out); }
+      .x-row__shot { transition: transform 300ms var(--ease-out), box-shadow 300ms var(--ease-out); }
+      @media (hover: hover) {
+        .x-row:hover::before { opacity: 0.6; }
+        .x-row:hover .x-row__shot { transform: translateY(-2px); box-shadow: 0 12px 28px rgb(0 0 0 / 0.22); }
+      }
+      /* Build / Break switch ripple */
+      .x-ripples { position: absolute; inset: 0; z-index: 2; border-radius: inherit; overflow: hidden; pointer-events: none; }
+      .x-ripple { position: absolute; width: 64px; height: 64px; margin: -32px 0 0 -32px; border-radius: 50%; background: rgb(255 255 255 / 0.2); transform: scale(0); animation: x-ripple 520ms var(--ease-out) forwards; }
+      @keyframes x-ripple { to { transform: scale(2.4); opacity: 0; } }
+
+      /* Scroll reveal: only once JS has added .x-motion to <html> */
+      .x-motion .x-rv { opacity: 0; transform: translateY(16px); }
+      .x-motion .x-rv.is-in { opacity: 1; transform: none; transition: opacity 500ms var(--ease-out), transform 500ms var(--ease-out); }
+      .x-stat__num { display: inline-block; text-align: left; }
+      /* Hero on load: avatar, greeting, name, status, statement in sequence */
+      .x-motion .x-hero .x-hero__frame, .x-motion .x-hero .x-hero__hey, .x-motion .x-hero h1, .x-motion .x-hero .x-meta, .x-motion .x-hero .x-hero__statement { animation: x-up 600ms var(--ease-out) both; }
+      .x-motion .x-hero .x-hero__hey { animation-delay: 90ms; }
+      .x-motion .x-hero h1 { animation-delay: 170ms; }
+      .x-motion .x-hero .x-meta { animation-delay: 250ms; }
+      .x-motion .x-hero .x-hero__statement { animation-delay: 330ms; }
+      @keyframes x-up { from { opacity: 0; transform: translateY(16px); } to { opacity: 1; transform: none; } }
+
+      @media (prefers-reduced-motion: reduce) {
+        .x-sid .x-side__id, .x-sid.is-id-off .x-side__id { transition: none; transform: none; }
+        .x-side__nav.x-ind .x-side__ind, .x-side__nav a, .x-pill, .x-filters button, .x-turn .btn, .x-icon__disc, .x-kit__logo, .x-row::before, .x-row__shot { transition: none; }
+        .x-side__nav a:active, .x-pill:active, .x-filters button:active, .x-cta:active > .x-pill, .x-arrow:active, .x-turn .btn:active, .x-icon:active .x-icon__disc, .x-icon:hover .x-icon__disc, .x-row:hover .x-row__shot { transform: none; }
+        .x-ripple { display: none; }
+        .x-motion .x-rv { opacity: 1; transform: none; }
+        .x-motion .x-hero .x-hero__frame, .x-motion .x-hero .x-hero__hey, .x-motion .x-hero h1, .x-motion .x-hero .x-meta, .x-motion .x-hero .x-hero__statement { animation: none; }
+      }
+
       /* Sleek themed scrollbar */
       html { scrollbar-color: color-mix(in srgb, var(--x-red) 75%, transparent) transparent; scrollbar-width: thin; }
       * { scrollbar-color: color-mix(in srgb, var(--x-red) 75%, transparent) transparent; scrollbar-width: thin; }
@@ -366,6 +443,7 @@
         <div class="x-capwrap">
           <div class="x-cap" role="tablist" aria-label="Pages">
             <span class="x-thumb" aria-hidden="true"></span>
+            <span class="x-ripples" aria-hidden="true"></span>
             <a class="x-tab x-tab--build" id="tab-build" role="tab" href="#build" data-turn="build" aria-controls="pg-build" aria-selected="true" tabindex="0"><span class="x-brk" aria-hidden="true"><i>{</i><i>}</i></span><span class="x-word">Build</span></a>
             <a class="x-tab x-tab--break" id="tab-break" role="tab" href="#break" data-turn="break" aria-controls="pg-break" aria-selected="false" tabindex="-1"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M12 3 4 6v6c0 4.5 3.4 8.3 8 9 4.6-.7 8-4.5 8-9V6z"/><path d="m12.5 4.5-2 5 3 2.5-2.5 4 1 3.5"/></svg><span class="x-word">Break</span></a>
           </div>
@@ -388,6 +466,7 @@
             <a class="x-pill" href="https://github.com/Shaydez-Defi" target="_blank" rel="noopener"><svg class="x-gh" viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><path d="M12 .297c-6.63 0-12 5.373-12 12 0 5.303 3.438 9.8 8.205 11.385.6.113.82-.258.82-.577 0-.285-.01-1.04-.015-2.04-3.338.724-4.042-1.61-4.042-1.61C4.422 18.07 3.633 17.7 3.633 17.7c-1.087-.744.084-.729.084-.729 1.205.084 1.838 1.236 1.838 1.236 1.07 1.835 2.809 1.305 3.495.998.108-.776.417-1.305.76-1.605-2.665-.3-5.466-1.332-5.466-5.93 0-1.31.465-2.38 1.235-3.22-.135-.303-.54-1.523.105-3.176 0 0 1.005-.322 3.3 1.23.96-.267 1.98-.399 3-.405 1.02.006 2.04.138 3 .405 2.28-1.552 3.285-1.23 3.285-1.23.645 1.653.24 2.873.12 3.176.765.84 1.23 1.91 1.23 3.22 0 4.61-2.805 5.625-5.475 5.92.42.36.81 1.096.81 2.22 0 1.606-.015 2.896-.015 3.286 0 .315.21.69.825.57C20.565 22.092 24 17.592 24 12.297c0-6.627-5.373-12-12-12"/></svg>GitHub</a>
           </div>
           <nav class="x-side__nav" aria-label="Sections">
+            <span class="x-side__ind" aria-hidden="true"></span>
             <ul>
               <li><a href="#build" data-goto="home" class="is-active"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M3 10.5 12 3l9 7.5V20a1 1 0 0 1-1 1h-5v-6h-6v6H4a1 1 0 0 1-1-1z"/></svg>Home</a></li>
               <li><a href="#build" data-goto="builds"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><rect x="3" y="3" width="7" height="7" rx="1.5"/><rect x="14" y="3" width="7" height="7" rx="1.5"/><rect x="3" y="14" width="7" height="7" rx="1.5"/><rect x="14" y="14" width="7" height="7" rx="1.5"/></svg>Builds<span class="x-mono">05</span></a></li>
@@ -663,6 +742,7 @@
 
         function setActive(id) {
           navLinks.forEach(function (a) { a.classList.toggle("is-active", a.getAttribute("data-goto") === id); });
+          if (window.__xInd) window.__xInd();
         }
         function spy() {
           if (current === "break") { setActive("breaks"); return; }
@@ -726,7 +806,7 @@
           bar.setAttribute("data-cur", name);
           frame.setAttribute("data-cur", name);
           progress();
-          document.title = (name === "break" ? "Break" : "Build") + " · Shaydez Portfolio";
+          document.title = "Shaydez — " + (name === "break" ? "Break" : "Build");
           setActive(name === "break" ? "breaks" : "home");
         }
         function show(name) {
@@ -854,6 +934,119 @@
             clearTimeout(b._t); b._t = setTimeout(function () { cap.textContent = "discord"; }, 2400);
           }
         });
+
+        // Sidebar identity (desktop): hidden while the Build hero is in view, slides in once it has scrolled away
+        var side = document.querySelector(".x-side"), hero = document.getElementById("home"), idT;
+        function setId(off) {
+          if (side.classList.contains("is-id-off") === off) return;
+          side.classList.add("is-id-anim"); clearTimeout(idT);
+          side.classList.toggle("is-id-off", off);
+          idT = setTimeout(function () { side.classList.remove("is-id-anim"); }, 340);
+        }
+        if (side && hero && "IntersectionObserver" in window) {
+          side.classList.add("x-sid", "is-id-still");
+          var hr = hero.getBoundingClientRect();
+          setId(!pages.build.hidden && hr.bottom > 120 && hr.top < window.innerHeight);
+          requestAnimationFrame(function () { requestAnimationFrame(function () { side.classList.remove("is-id-still"); }); });
+          new IntersectionObserver(function (es) {
+            var e = es[es.length - 1];
+            setId(e.isIntersecting && !pages.build.hidden);
+          }, { rootMargin: "-120px 0px 0px 0px" }).observe(hero);
+        }
+
+        // Sidebar nav: a single indicator that slides to the active link, and peeks at the hovered one
+        var nav = document.querySelector(".x-side__nav"), ind = nav && nav.querySelector(".x-side__ind"), hoverA = null;
+        if (nav && ind) {
+          var placeInd = function (a, peek) {
+            if (!a) return;
+            ind.style.setProperty("--y", a.offsetTop + "px");
+            ind.classList.toggle("is-peek", !!peek);
+          };
+          window.__xInd = function () { if (!hoverA) placeInd(nav.querySelector("a.is-active")); };
+          nav.classList.add("x-ind");
+          ind.style.transition = "none";
+          window.__xInd();
+          requestAnimationFrame(function () { requestAnimationFrame(function () { ind.style.transition = ""; }); });
+          navLinks.forEach(function (a) {
+            a.addEventListener("mouseenter", function () { hoverA = a; placeInd(a, !a.classList.contains("is-active")); });
+          });
+          nav.addEventListener("mouseleave", function () { hoverA = null; window.__xInd(); });
+          window.addEventListener("resize", window.__xInd);
+        }
+
+        // Build / Break switch: a soft ripple from the press point
+        var rip = document.querySelector(".x-ripples");
+        tabs.forEach(function (t) {
+          t.addEventListener("pointerdown", function (e) {
+            if (reduce.matches || !rip) return;
+            var b = rip.getBoundingClientRect(), s = document.createElement("span");
+            s.className = "x-ripple";
+            s.style.left = (e.clientX - b.left) + "px";
+            s.style.top = (e.clientY - b.top) + "px";
+            rip.appendChild(s);
+            setTimeout(function () { s.remove(); }, 600);
+          });
+        });
+      })();
+    </script>
+    <script>
+      // Scroll reveal: fade-up once per element, staggered within a group; stats count up
+      (function () {
+        window.__xReveal = true;
+        if (!document.documentElement.classList.contains("x-motion")) return;
+        var singles = ".x-pg > .x-marquee, .x-pg > .x-bio, .x-head, .x-filters, .x-more, .x-ledger-card .table-wrap, .x-contact__row > .x-cta, .x-turn";
+        var groups = ".x-stats > .x-card, .x-rows > .x-row, .x-kit > li, .x-icons > li";
+        var items = [].slice.call(document.querySelectorAll(singles + ", " + groups));
+        items.forEach(function (el) { el.classList.add("x-rv"); });
+
+        // wrap each numeric stat in a fixed-width span so counting never shifts the layout
+        [].forEach.call(document.querySelectorAll(".x-stat__fig"), function (f) {
+          var t = f.firstChild;
+          if (!t || t.nodeType !== 3) return;
+          var n = parseInt(t.nodeValue, 10);
+          if (isNaN(n)) return;
+          var s = document.createElement("span");
+          s.className = "x-stat__num";
+          s.textContent = String(n);
+          s.style.minWidth = String(n).length + "ch";
+          f.replaceChild(s, t);
+          f._num = s; f._to = n;
+        });
+        function count(f) {
+          var s = f._num, to = f._to, t0 = null, dur = 900;
+          s.textContent = "0";
+          function step(ts) {
+            if (t0 === null) t0 = ts;
+            var p = Math.min(1, (ts - t0) / dur), e = 1 - Math.pow(1 - p, 3);
+            s.textContent = String(Math.round(to * e));
+            if (p < 1) requestAnimationFrame(step);
+          }
+          requestAnimationFrame(step);
+        }
+
+        function reveal(el, delay) {
+          io.unobserve(el);
+          if (delay) el.style.transitionDelay = delay + "ms";
+          el.classList.add("is-in");
+          var f = el.querySelector(".x-stat__fig");
+          if (f && f._num) setTimeout(function () { count(f); }, delay);
+          // once shown, drop the reveal classes so hover transitions run at their own speed
+          setTimeout(function () { el.classList.remove("x-rv", "is-in"); el.style.transitionDelay = ""; }, delay + 560);
+        }
+        var io = new IntersectionObserver(function (entries) {
+          var batch = entries.filter(function (e) { return e.isIntersecting || e.boundingClientRect.bottom < 0; }).map(function (e) { return e.target; });
+          batch.sort(function (a, b) { return a.compareDocumentPosition(b) & 4 ? -1 : 1; });
+          var per = new Map();
+          batch.forEach(function (el) {
+            var i = 0;
+            if (el.matches(groups) && el.getBoundingClientRect().bottom >= 0) {
+              i = per.get(el.parentNode) || 0;
+              per.set(el.parentNode, i + 1);
+            }
+            reveal(el, Math.min(i, 8) * 50);
+          });
+        }, { rootMargin: "0px 0px -8% 0px", threshold: 0 });
+        items.forEach(function (el) { io.observe(el); });
       })();
     </script>
   </body>
