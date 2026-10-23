@@ -1,0 +1,798 @@
+<!doctype html>
+<html lang="en" data-theme="dark">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>Shaydez Portfolio</title>
+    <meta name="description" content="Shaydez builds onchain products and breaks onchain code. Full-stack Web3 developer and independent smart-contract security researcher." />
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link
+      rel="stylesheet"
+      href="https://fonts.googleapis.com/css2?family=Geist:wght@400;500;600;800&family=Geist+Mono:wght@400&display=swap"
+    />
+    <link rel="stylesheet" href="hark.css" />
+    <link rel="stylesheet" href="hark-hero.css" />
+    <style>
+      :root {
+        --page-max: 1360px;
+        --x-mono: "Geist Mono", ui-monospace, SFMono-Regular, Menlo, monospace;
+        --x-accent: light-dark(#c81f26, #e5343b);
+        --x-red: #c81f26;
+        --x-panel: light-dark(#ffffff, #111113);
+        --x-raised: light-dark(#ffffff, #151517);
+        --x-card: var(--fill-tertiary);
+      }
+      /* Near-black canvas in dark mode */
+      :root[data-theme="dark"] { --fill-primary-on: #0c0c0d; --fill-tertiary: #1a1a1c; }
+      @media (prefers-color-scheme: dark) { :root:not([data-theme="light"]) { --fill-primary-on: #0c0c0d; --fill-tertiary: #1a1a1c; } }
+
+      .x-mono { font: var(--weight-regular) var(--size-caption)/var(--lh) var(--x-mono); letter-spacing: 0.02em; }
+      .x-label { font: var(--weight-regular) var(--size-caption)/var(--lh) var(--x-mono); color: var(--text-secondary); letter-spacing: 0.02em; text-transform: uppercase; }
+
+      /* Pills: Hire me (filled red) and outlined */
+      .x-pill { display: inline-flex; align-items: center; justify-content: center; gap: 8px; min-height: var(--tap); padding: 0 20px; border-radius: var(--r-pill); border: 1px solid var(--stroke-primary); background: transparent; color: var(--text-primary); font: var(--type-label); text-decoration: none; transition: background var(--dur-quick) var(--ease-out), border-color var(--dur-quick) var(--ease-out), transform var(--dur-quick) var(--ease-out); }
+      .x-pill:hover { border-color: var(--x-accent); }
+      .x-pill--red { background: var(--x-red); border-color: var(--x-red); color: #fff; }
+      .x-pill--red:hover { background: #a9181e; }
+      .x-arrow { display: inline-grid; place-items: center; flex: none; width: var(--tap); height: var(--tap); border-radius: 50%; border: 1px solid var(--stroke-primary); background: var(--x-card); color: var(--text-primary); text-decoration: none; transition: background var(--dur-quick) var(--ease-out), color var(--dur-quick) var(--ease-out), border-color var(--dur-quick) var(--ease-out), transform var(--dur-quick) var(--ease-out); }
+      .x-arrow svg { width: 18px; height: 18px; }
+      .x-arrow:hover, a:hover > .x-arrow { background: var(--x-red); border-color: var(--x-red); color: #fff; transform: rotate(-45deg); }
+      .x-cta { display: inline-flex; align-items: center; gap: 6px; text-decoration: none; }
+      .x-tag { display: inline-flex; align-items: center; gap: 6px; padding: 4px 10px; border-radius: var(--r-pill); border: 1px solid var(--stroke-primary); font: var(--weight-regular) var(--size-caption)/var(--lh) var(--x-mono); color: var(--text-secondary); }
+      .x-tag--label::before { content: "\25CE"; color: var(--x-accent); }
+
+      /* Shell: sidebar + content panel */
+      .x-shell { display: grid; grid-template-columns: minmax(0, 1fr); gap: 16px; min-width: 0; }
+      .x-side { display: grid; gap: 16px; padding: 20px; border-radius: var(--r-l); background: var(--x-raised); border: 1px solid var(--stroke-secondary); box-shadow: 0 12px 40px rgb(0 0 0 / 0.35); }
+      .x-side__id { display: flex; align-items: center; gap: 14px; }
+      .x-side__avatar { width: 56px; height: 56px; border-radius: 50%; object-fit: cover; flex: none; border: 1px solid var(--stroke-primary); }
+      .x-side__name { font: var(--weight-bold) 22px/1.1 var(--sans); letter-spacing: -0.02em; margin-top: 4px; }
+      .x-side__btns { display: flex; gap: 8px; }
+      .x-side__btns .x-pill { flex: 1; }
+      .x-side__nav { display: none; }
+      .x-side__nav ul { display: grid; gap: 2px; margin: 0; padding: 0; list-style: none; }
+      .x-side__nav a { display: flex; align-items: center; gap: 12px; min-height: var(--tap); padding: 0 12px; border-radius: var(--r-s); color: var(--text-secondary); font: var(--type-label); text-decoration: none; transition: background var(--dur-quick) var(--ease-out), color var(--dur-quick) var(--ease-out); }
+      .x-side__nav a svg { width: 18px; height: 18px; flex: none; }
+      .x-side__nav a:hover { color: var(--text-primary); background: var(--hover-wash); }
+      .x-side__nav a.is-active { color: var(--text-primary); background: var(--x-card); box-shadow: inset 2px 0 0 var(--x-accent); }
+      .x-side__nav a.is-active svg { color: var(--x-accent); }
+      .x-side__nav a span.x-mono { margin-left: auto; color: var(--text-secondary); }
+      @media (min-width: 1024px) {
+        .x-shell { grid-template-columns: 280px minmax(0, 1fr); align-items: start; gap: 20px; }
+        .x-side { position: sticky; top: calc(env(safe-area-inset-top, 0px) + 76px); max-height: calc(100vh - 96px); overflow-y: auto; padding: 24px; align-content: start; }
+        .x-side__id { display: grid; gap: 14px; }
+        .x-side__avatar { width: 88px; height: 88px; box-shadow: 0 0 40px rgb(229 52 59 / 0.22); }
+        .x-side__name { font-size: 28px; }
+        .x-side__nav { display: block; padding-top: 16px; border-top: 1px solid var(--stroke-secondary); }
+      }
+
+      /* Small icon row (sidebar) and big icon row (contact) */
+      .x-icons { display: flex; flex-wrap: wrap; gap: 16px 20px; margin: 0; padding: 0; list-style: none; }
+      .x-icon { display: grid; justify-items: center; gap: 8px; padding: 0; border: 0; background: none; color: var(--text-primary); text-decoration: none; cursor: pointer; font: inherit; }
+      .x-icon__disc { display: grid; place-items: center; width: 56px; height: 56px; border-radius: 50%; border: 1px solid var(--stroke-primary); background: var(--x-card); transition: color var(--dur-quick) var(--ease-out), border-color var(--dur-quick) var(--ease-out), transform var(--dur-quick) var(--ease-out); }
+      .x-icon svg { width: 22px; height: 22px; }
+      .x-icon__cap { font: var(--weight-regular) var(--size-caption)/var(--lh) var(--x-mono); color: var(--text-secondary); text-transform: lowercase; }
+      .x-icon:hover .x-icon__disc, .x-icon:focus-visible .x-icon__disc { color: var(--x-accent); border-color: var(--x-accent); transform: translateY(-2px); }
+      .x-icon:hover .x-icon__cap { color: var(--text-primary); }
+
+      /* Build / Break switch: counter, capsule with sliding thumb, scroll progress */
+      .x-bar { position: sticky; top: calc(env(safe-area-inset-top, 0px) + 10px); z-index: 20; justify-self: center; max-width: 100%; display: flex; align-items: center; gap: 8px; padding: 4px; border-radius: var(--r-pill); border: 1px solid transparent; transition: background var(--dur-quick) var(--ease-out), border-color var(--dur-quick) var(--ease-out), box-shadow var(--dur-quick) var(--ease-out); }
+      .x-bar.is-stuck { background: color-mix(in srgb, var(--fill-primary-on) 70%, transparent); -webkit-backdrop-filter: var(--hark-blur); backdrop-filter: var(--hark-blur); border-color: var(--stroke-secondary); box-shadow: var(--hark-shadow); }
+      .x-count { display: inline-flex; align-items: center; gap: 4px; padding-left: 6px; font: var(--weight-regular) var(--size-caption)/1 var(--x-mono); color: var(--text-secondary); letter-spacing: 0.04em; font-variant-numeric: tabular-nums; white-space: nowrap; }
+      .x-odo { display: inline-block; height: 1.2em; overflow: hidden; color: var(--text-primary); }
+      .x-odo__col { display: block; transition: transform 560ms cubic-bezier(0.34, 1.56, 0.64, 1); }
+      .x-odo__col span { display: block; height: 1.2em; line-height: 1.2em; }
+      .x-bar[data-cur="break"] .x-odo__col { transform: translateY(-1.2em); }
+      .x-capwrap { position: relative; }
+      .x-cap { position: relative; display: grid; grid-template-columns: 1fr 1fr; height: 48px; padding: 4px; border-radius: var(--r-pill); background: #121214; border: 1px solid rgb(255 255 255 / 0.14); transition: height var(--dur-quick) var(--ease-out); }
+      .x-cap { height: calc(var(--tap) + 10px); }
+      .x-tab { min-height: var(--tap); }
+      .x-bar.is-stuck .x-cap { height: calc(var(--tap) + 8px); padding: 3px; }
+      .x-bar.is-stuck .x-thumb { top: 3px; bottom: 3px; left: 3px; width: calc(50% - 3px); }
+      .x-thumb { position: absolute; top: 4px; bottom: 4px; left: 4px; width: calc(50% - 4px); border-radius: var(--r-pill); background: var(--x-red); box-shadow: 0 4px 18px rgb(200 31 38 / 0.45); transition: transform 560ms cubic-bezier(0.34, 1.56, 0.64, 1); }
+      .x-bar[data-cur="break"] .x-thumb { transform: translateX(100%); }
+      .x-tab { position: relative; z-index: 1; display: flex; align-items: center; justify-content: center; gap: 7px; padding: 0 12px; border-radius: var(--r-pill); color: #a1a1a6; font: var(--weight-regular) var(--size-caption)/1 var(--x-mono); text-transform: uppercase; letter-spacing: 0.12em; text-decoration: none; white-space: nowrap; transition: color var(--dur-quick) var(--ease-out); }
+      .x-tab::after { content: ""; position: absolute; inset: -4px 0; }
+      .x-tab:hover { color: #fff; }
+      .x-tab[aria-selected="true"] { color: #fff; }
+      .x-tab:focus-visible { outline: 2px solid #fff; outline-offset: -2px; }
+      .x-tab svg { width: 14px; height: 14px; flex: none; }
+      .x-brk { display: inline-flex; gap: 1px; font-weight: var(--weight-medium); letter-spacing: 0; }
+      .x-brk i { font-style: normal; display: inline-block; transition: transform 260ms cubic-bezier(0.34, 1.56, 0.64, 1); }
+      .x-tab--build:hover .x-brk i:first-child, .x-tab--build:focus-visible .x-brk i:first-child { transform: translateX(-2px); }
+      .x-tab--build:hover .x-brk i:last-child, .x-tab--build:focus-visible .x-brk i:last-child { transform: translateX(2px); }
+      .x-word { display: inline-block; }
+      .x-tab--break:hover .x-word, .x-tab--break:focus-visible .x-word { animation: x-glitch 210ms steps(1, end) 1; }
+      @keyframes x-glitch {
+        0% { text-shadow: -2px 0 rgb(255 40 80 / 0.9), 2px 0 rgb(0 220 255 / 0.9); transform: translateX(1px); }
+        33% { text-shadow: 2px 0 rgb(255 40 80 / 0.9), -2px 0 rgb(0 220 255 / 0.9); transform: translate(-1px, -1px); }
+        66% { text-shadow: -1px 0 rgb(255 40 80 / 0.9), 1px 0 rgb(0 220 255 / 0.9); transform: translateX(0); }
+        100% { text-shadow: none; transform: none; }
+      }
+      .x-prog { position: absolute; left: 18px; right: 18px; bottom: -6px; height: 1px; background: var(--stroke-secondary); border-radius: 1px; overflow: hidden; }
+      .x-prog span { display: block; height: 100%; background: var(--x-accent); transform-origin: left center; transform: scaleX(0); }
+      .x-themewrap { display: grid; flex: none; border-radius: 50%; background: var(--mat-inverse); border: 1px solid var(--stroke-primary-on); }
+      @media (prefers-reduced-motion: reduce) {
+        .x-thumb, .x-odo__col, .x-brk i { transition: none; }
+        .x-tab--break:hover .x-word, .x-tab--break:focus-visible .x-word { animation: none; }
+      }
+
+      /* Pages and the page turn */
+      .x-book { position: relative; perspective: 2200px; perspective-origin: 0 30vh; overflow-x: clip; min-width: 0; }
+      .x-pg { display: grid; grid-template-columns: minmax(0, 1fr); gap: 16px; min-width: 0; padding: clamp(12px, 2vw, 20px); border-radius: var(--r-xl); background: var(--x-panel); border: 1px solid var(--stroke-secondary); container-type: inline-size; }
+      .x-pg[hidden] { display: none; }
+      .x-pg.is-over { position: absolute; inset: 0 0 auto 0; z-index: 2; max-height: 100vh; overflow: hidden; transform-origin: left center; backface-visibility: hidden; will-change: transform; }
+      .x-pg.is-under { position: relative; }
+      .x-pg.is-under::after { content: ""; position: absolute; inset: 0; z-index: 1; pointer-events: none; border-radius: inherit; background: linear-gradient(to right, rgb(0 0 0 / 0.45), rgb(0 0 0 / 0.1) 60%, transparent); }
+      .x-pg.is-out { animation: x-flip-out 720ms cubic-bezier(0.45, 0.05, 0.3, 1) forwards; }
+      .x-pg.is-in { animation: x-flip-in 720ms cubic-bezier(0.45, 0.05, 0.3, 1) forwards; }
+      .x-pg.is-under.is-lit::after { animation: x-shade-off 720ms var(--ease-out) forwards; }
+      .x-pg.is-under.is-dim::after { animation: x-shade-on 720ms var(--ease-out) forwards; }
+      @keyframes x-flip-out {
+        0% { transform: rotateY(0); box-shadow: 0 0 0 rgb(0 0 0 / 0); }
+        40% { box-shadow: 24px 0 48px rgb(0 0 0 / 0.35); }
+        100% { transform: rotateY(-100deg); box-shadow: 40px 0 60px rgb(0 0 0 / 0); opacity: 0.6; }
+      }
+      @keyframes x-flip-in {
+        0% { transform: rotateY(-100deg); box-shadow: 40px 0 60px rgb(0 0 0 / 0); opacity: 0.6; }
+        60% { box-shadow: 24px 0 48px rgb(0 0 0 / 0.35); }
+        100% { transform: rotateY(0); box-shadow: 0 0 0 rgb(0 0 0 / 0); opacity: 1; }
+      }
+      @keyframes x-shade-off { from { opacity: 1; } to { opacity: 0; } }
+      @keyframes x-shade-on { from { opacity: 0; } to { opacity: 1; } }
+      @keyframes x-fade-out { from { opacity: 1; } to { opacity: 0; } }
+      @media (prefers-reduced-motion: reduce) {
+        .x-pg.is-out, .x-pg.is-in { animation: x-fade-out 240ms linear forwards; transform: none; box-shadow: none; }
+        .x-pg.is-in { animation-direction: reverse; }
+        .x-pg.is-under::after { display: none; }
+      }
+
+      /* Cards inside the panel */
+      .x-card { padding: clamp(20px, 3cqi, 32px); border-radius: var(--r-l); background: var(--x-card); border: 1px solid var(--stroke-secondary); min-width: 0; }
+      .x-sec { scroll-margin-top: calc(env(safe-area-inset-top, 0px) + 80px); min-width: 0; }
+
+      /* Hero card */
+      .x-hero { display: grid; gap: 24px; align-items: center; overflow: hidden; position: relative; }
+      .x-hero__frame { position: relative; width: min(100%, 280px); aspect-ratio: 1; }
+      .x-hero__frame::before { content: ""; position: absolute; inset: 12%; border-radius: 50%; background: var(--x-red); filter: blur(48px); opacity: 0.35; }
+      .x-hero__frame img { position: relative; width: 100%; height: 100%; object-fit: cover; border-radius: var(--r-xl); border: 1px solid var(--stroke-primary); }
+      .x-hero__hey { font: var(--type-lede); color: var(--text-secondary); }
+      .x-hero h1 { font: var(--weight-bold) clamp(52px, 11cqi, 112px)/0.95 var(--sans); letter-spacing: -0.045em; margin: 6px 0 16px; }
+      .x-meta { display: flex; flex-wrap: wrap; gap: 8px; }
+      .x-meta span { display: inline-flex; align-items: center; gap: 8px; padding: 6px 12px; border-radius: var(--r-pill); border: 1px solid var(--stroke-primary); background: var(--x-panel); font: var(--weight-regular) var(--size-caption)/var(--lh) var(--x-mono); color: var(--text-secondary); }
+      .x-meta span::before { content: ""; width: 7px; height: 7px; border-radius: 50%; background: var(--text-secondary); flex: none; }
+      .x-meta .x-live::before { content: none; display: none; }
+      .x-hero__statement { font: var(--weight-medium) clamp(20px, 3cqi, 28px)/1.2 var(--sans); letter-spacing: -0.01em; margin: 20px 0 22px; max-width: 26ch; }
+      .x-hero__statement em { font-style: normal; color: var(--x-accent); }
+      @container (min-width: 640px) { .x-hero { grid-template-columns: minmax(200px, 0.8fr) minmax(0, 1.2fr); gap: clamp(24px, 4cqi, 48px); } .x-hero__frame { width: 100%; } .x-hero--solo { grid-template-columns: minmax(0, 1fr); } }
+      .x-hero--solo { background: radial-gradient(circle at 100% 0%, rgb(229 52 59 / 0.16), transparent 55%), var(--x-card); }
+
+      /* Marquee */
+      .x-marquee { display: flex; align-items: center; gap: 20px; padding: 16px 20px; border-radius: var(--r-l); border: 1px solid var(--stroke-secondary); overflow: hidden; }
+      .x-marquee__lead { flex: none; font: var(--type-label); color: var(--text-primary); }
+      .x-marquee__view { flex: 1; min-width: 0; overflow: hidden; mask-image: linear-gradient(to right, transparent, #000 8%, #000 92%, transparent); }
+      .x-marquee__track { display: flex; width: max-content; animation: x-scroll 40s linear infinite; }
+      .x-marquee:hover .x-marquee__track { animation-play-state: paused; }
+      .x-marquee ul { display: flex; flex: none; gap: 0; margin: 0; padding: 0; list-style: none; }
+      .x-marquee li { padding-right: 28px; white-space: nowrap; color: var(--text-secondary); font: var(--weight-regular) var(--size-small)/var(--lh) var(--x-mono); }
+      .x-marquee li::after { content: "\00B7"; padding-left: 28px; color: var(--x-accent); }
+      @keyframes x-scroll { to { transform: translateX(-50%); } }
+      @media (prefers-reduced-motion: reduce) {
+        .x-marquee__track { animation: none; width: auto; }
+        .x-marquee__track ul[aria-hidden] { display: none; }
+        .x-marquee ul { flex-wrap: wrap; row-gap: 6px; }
+        .x-marquee__view { mask-image: none; }
+      }
+
+      /* Bio */
+      .x-bio { display: grid; gap: 20px; padding-block: clamp(24px, 5cqi, 48px); }
+      .x-bio p { font: var(--weight-medium) clamp(20px, 3.2cqi, 32px)/1.3 var(--sans); letter-spacing: -0.015em; }
+      .x-bio p span { color: var(--text-secondary); }
+      @container (min-width: 640px) { .x-bio { grid-template-columns: auto minmax(0, 1fr); gap: 40px; align-items: start; } .x-bio p { text-align: right; } }
+
+      /* Stat cards */
+      .x-stats { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 12px; }
+      .x-stats .x-card { display: grid; gap: 10px; align-content: space-between; min-height: 140px; }
+      .x-stat__fig { font: var(--weight-bold) clamp(44px, 7cqi, 64px)/1 var(--sans); letter-spacing: -0.04em; font-variant-numeric: tabular-nums; }
+      .x-stat__fig sup { font-size: 0.4em; color: var(--x-accent); vertical-align: top; margin-left: 2px; }
+      .x-stat__label { font: var(--weight-regular) var(--size-caption)/var(--lh) var(--x-mono); color: var(--text-secondary); text-transform: uppercase; letter-spacing: 0.02em; }
+      @container (min-width: 640px) { .x-stats { grid-template-columns: repeat(4, minmax(0, 1fr)); } }
+
+      /* Section header: pill label left, big title right */
+      .x-head { display: flex; flex-wrap: wrap; align-items: end; justify-content: space-between; gap: 16px; padding-block: clamp(32px, 6cqi, 56px) 20px; }
+      .x-head h2 { font: var(--weight-bold) clamp(40px, 8cqi, 80px)/0.95 var(--sans); letter-spacing: -0.04em; }
+      .x-head__sub { flex-basis: 100%; color: var(--text-secondary); font-size: var(--size-body); }
+
+      /* Filter chips */
+      .x-filters { display: flex; flex-wrap: wrap; gap: 8px; margin-bottom: 24px; }
+      .x-filters button { min-height: 36px; padding: 0 16px; border-radius: var(--r-pill); border: 1px solid var(--stroke-primary); background: transparent; color: var(--text-secondary); font: var(--weight-regular) var(--size-caption)/var(--lh) var(--x-mono); text-transform: uppercase; letter-spacing: 0.02em; cursor: pointer; transition: background var(--dur-quick) var(--ease-out), color var(--dur-quick) var(--ease-out), border-color var(--dur-quick) var(--ease-out); }
+      .x-filters button:hover { color: var(--text-primary); border-color: var(--text-secondary); }
+      .x-filters button[aria-pressed="true"] { background: var(--x-red); border-color: var(--x-red); color: #fff; }
+      @media (pointer: coarse), (max-width: 599px) { .x-filters button { min-height: var(--tap); } }
+
+      /* Project rows */
+      .x-rows { display: grid; gap: 34px; margin: 0; padding: 14px 0 0; list-style: none; container-type: inline-size; }
+      .x-row { position: relative; display: grid; gap: 16px; padding: 22px; border-radius: 0 var(--r-l) var(--r-l) var(--r-l); background: var(--x-card); border: 1px solid var(--stroke-secondary); transition: transform var(--dur-quick) var(--ease-out), border-color var(--dur-quick) var(--ease-out), box-shadow var(--dur-quick) var(--ease-out); }
+      .x-row[hidden] { display: none; }
+      .x-row:hover { transform: translateY(-3px); border-color: rgb(229 52 59 / 0.55); box-shadow: 0 10px 40px rgb(229 52 59 / 0.12); }
+      .x-row__tab { position: absolute; left: -1px; bottom: 100%; padding: 5px 14px 4px; border-radius: 10px 10px 0 0; background: var(--x-card); border: 1px solid var(--stroke-secondary); border-bottom: 0; color: var(--text-secondary); font: var(--weight-regular) var(--size-caption)/var(--lh) var(--x-mono); letter-spacing: 0.06em; white-space: nowrap; }
+      .x-row--first .x-row__tab { background: var(--x-red); border-color: var(--x-red); color: #fff; }
+      .x-row__idx { color: var(--text-secondary); font: var(--weight-regular) var(--size-small)/var(--lh) var(--x-mono); }
+      .x-row__top { display: flex; align-items: baseline; gap: 14px; }
+      .x-row h3 { font: var(--weight-bold) clamp(28px, 4cqi, 40px)/1 var(--sans); letter-spacing: -0.03em; }
+      .x-row__pitch { color: var(--text-secondary); font-size: var(--size-body); margin-top: 10px; max-width: 46ch; }
+      .x-row__code { display: inline-flex; align-items: center; min-height: var(--tap); margin-top: 2px; color: var(--text-primary); font: var(--weight-regular) var(--size-caption)/var(--lh) var(--x-mono); text-transform: uppercase; text-decoration: underline; text-decoration-color: var(--stroke-primary); text-underline-offset: 3px; }
+      .x-row__code:hover { color: var(--x-accent); text-decoration-color: currentColor; }
+      .x-row__shot { margin: 0; aspect-ratio: 16 / 9; overflow: hidden; border-radius: var(--r-m); border: 1px solid var(--stroke-secondary); background: var(--fill-primary-on); }
+      .x-row__shot img { width: 100%; height: 100%; object-fit: cover; object-position: top center; transition: transform 400ms var(--ease-out); }
+      .x-row:hover .x-row__shot img { transform: scale(1.03); }
+      .x-row__stack .x-label { display: block; margin-bottom: 8px; }
+      .x-row__stack ul { display: flex; flex-wrap: wrap; gap: 6px; margin: 0; padding: 0; list-style: none; }
+      .x-row__stack li { padding: 3px 9px; border-radius: var(--r-pill); border: 1px solid var(--stroke-primary); font: var(--weight-regular) var(--size-caption)/var(--lh) var(--x-mono); color: var(--text-secondary); }
+      .x-row__go { display: flex; align-items: center; gap: 10px; }
+      .x-row__go .x-arrow { background: var(--x-panel); }
+      .x-row__go-label { font: var(--weight-regular) var(--size-caption)/var(--lh) var(--x-mono); text-transform: uppercase; }
+      @container (min-width: 820px) {
+        .x-row { grid-template-columns: 52px minmax(0, 1.25fr) minmax(0, 1fr) minmax(0, 0.9fr) auto; align-items: center; gap: 24px; }
+        .x-row__top { display: contents; }
+        .x-row__idx { align-self: start; padding-top: 8px; }
+        .x-row__body { grid-column: 2; grid-row: 1; }
+        .x-row__go { flex-direction: column; }
+        .x-row__go-label { display: none; }
+      }
+      .x-more { padding-top: 20px; font: var(--type-label); }
+      .x-empty { padding: 24px 0; color: var(--text-secondary); font: var(--weight-regular) var(--size-caption)/var(--lh) var(--x-mono); }
+
+      /* Toolkit */
+      .x-kit { --cols: 3; --gap: 10px; display: flex; flex-wrap: wrap; justify-content: center; gap: var(--gap); margin: 0; padding: 0; list-style: none; }
+      @container (min-width: 820px) { .x-kit { --cols: 4; --gap: 12px; } }
+      .x-kit li { container-type: inline-size; flex: 0 0 calc((100% - (var(--cols) - 1) * var(--gap)) / var(--cols)); display: flex; flex-direction: column; align-items: center; justify-content: center; gap: 9cqi; aspect-ratio: 1; min-width: 0; border-radius: var(--r-l); background: var(--x-card); border: 1px solid var(--stroke-secondary); color: var(--text-primary); outline: none; transition: border-color var(--dur-quick) var(--ease-out), transform var(--dur-quick) var(--ease-out); }
+      .x-kit li:hover, .x-kit li:focus-visible { border-color: rgb(229 52 59 / 0.55); transform: translateY(-3px); }
+      .x-kit li:focus-visible { box-shadow: 0 0 0 2px var(--x-accent); }
+      .x-kit__logo { display: grid; place-items: center; width: 40cqi; height: 40cqi; margin-top: 10cqi; transition: color var(--dur-quick) var(--ease-out), transform var(--dur-quick) var(--ease-out); }
+      .x-kit__logo svg, .x-kit__logo img { display: block; width: 100%; height: 100%; object-fit: contain; fill: currentColor; }
+      .x-kit__logo--wide { width: 76cqi; }
+      .x-kit li:hover .x-kit__logo, .x-kit li:focus-visible .x-kit__logo { color: var(--brand, var(--text-primary)); transform: scale(1.06); }
+      .x-kit__name { max-width: 90%; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; font: var(--weight-regular) var(--size-caption)/1.2 var(--x-mono); color: var(--text-secondary); }
+      :root[data-theme="light"] .x-kit__logo img { filter: invert(1); }
+      @media (prefers-color-scheme: light) { :root:not([data-theme]) .x-kit__logo img { filter: invert(1); } }
+      @media (prefers-reduced-motion: reduce) { .x-kit li, .x-kit__logo { transition: none; } .x-kit li:hover, .x-kit li:focus-visible, .x-kit li:hover .x-kit__logo, .x-kit li:focus-visible .x-kit__logo { transform: none; } }
+
+      /* Contact card */
+      .x-contact { display: grid; gap: 28px; margin-top: clamp(32px, 6cqi, 56px); }
+      .x-contact h2 { font: var(--weight-bold) clamp(28px, 5cqi, 48px)/1.08 var(--sans); letter-spacing: -0.03em; max-width: 20ch; }
+      .x-contact__row { display: flex; flex-wrap: wrap; align-items: end; justify-content: space-between; gap: 24px; padding-top: 24px; border-top: 1px solid var(--stroke-secondary); }
+
+      /* Findings ledger */
+      .x-ledger-card h2 { font: var(--weight-bold) clamp(24px, 3.5cqi, 32px)/1.1 var(--sans); letter-spacing: -0.02em; margin-bottom: 20px; }
+      .x-ledger-card .table-wrap { margin-inline: 0; padding-inline: 0; }
+      .x-ledger td, .x-ledger th { white-space: nowrap; }
+      .x-ledger thead th { font: var(--weight-regular) var(--size-caption)/var(--lh) var(--x-mono); text-transform: uppercase; letter-spacing: 0.02em; }
+      .x-ledger tbody th { white-space: normal; }
+      .x-ledger:has(tbody tr) tfoot { display: none; }
+      .x-ledger tfoot td { padding: 40px 0; text-align: center; border-bottom: 0; font: var(--weight-regular) var(--size-caption)/var(--lh) var(--x-mono); color: var(--text-secondary); }
+      @media (max-width: 599px) { .x-ledger tfoot { display: block; } .x-ledger tfoot tr, .x-ledger tfoot td { display: block; } }
+      .x-sev, .x-status { display: inline-flex; align-items: center; gap: 6px; padding: 2px 8px; border-radius: var(--r-pill); font: var(--weight-regular) var(--size-caption)/var(--lh) var(--x-mono); border: 1px solid var(--stroke-primary); color: var(--text-primary); }
+      .x-sev::before, .x-status::before { content: ""; width: 7px; height: 7px; border-radius: 50%; flex: none; }
+      .x-sev--critical { border-color: var(--x-accent); color: var(--x-accent); }
+      .x-sev--critical::before { background: var(--x-accent); }
+      .x-sev--high::before { background: var(--fill-system-orange); }
+      .x-sev--medium::before { background: var(--text-secondary); }
+      .x-sev--low::before { box-shadow: inset 0 0 0 1.5px var(--text-tertiary); }
+      .x-status--disclosed::before { box-shadow: inset 0 0 0 1.5px var(--text-secondary); }
+      .x-status--fixed::before { background: var(--fill-system-green); }
+      .x-status--latent::before { background: var(--fill-system-orange); }
+
+      /* Footer: huge faint wordmark, bleeding off the bottom edge */
+      body { overflow-x: clip; }
+      .x-foot { position: relative; width: 100vw; margin: clamp(24px, 6vw, 64px) calc(50% - 50vw) -40px; overflow: hidden; padding-top: 8px; }
+      .x-mark { position: relative; margin: 0 0 -0.14em; text-align: center; white-space: nowrap; font: 800 clamp(84px, 29vw, 960px)/0.8 var(--sans); letter-spacing: -0.065em; padding-right: 0.065em; color: color-mix(in srgb, var(--text-primary) 5%, transparent); -webkit-text-stroke: 1px color-mix(in srgb, var(--text-primary) 6%, transparent); user-select: none; }
+      .x-mark--break { display: none; }
+      .page[data-cur="break"] .x-mark--build { display: none; }
+      .page[data-cur="break"] .x-mark--break { display: block; }
+      .x-mark--break .x-mark__ghost { color: transparent; -webkit-text-stroke: 0; }
+      .x-mark__half { position: absolute; inset: 0; padding-right: 0.065em; }
+      .x-mark__half--a { clip-path: polygon(0 0, 59% 0, 55% 28%, 51.5% 41%, 48% 68%, 43% 100%, 0 100%); }
+      .x-mark__half--b { clip-path: polygon(59% 0, 100% 0, 100% 100%, 43% 100%, 48% 68%, 51.5% 41%, 55% 28%); transform: translate(0.02em, 0.028em); }
+      .x-mark__crack { position: absolute; inset: 0; width: 100%; height: 100%; overflow: visible; }
+      .x-mark__crack polyline { fill: none; stroke: var(--x-accent); stroke-width: 1; opacity: 0.45; vector-effect: non-scaling-stroke; }
+      .x-foot__copy { position: absolute; left: 0; right: 0; bottom: calc(env(safe-area-inset-bottom, 0px) + 14px); text-align: center; font: var(--weight-regular) var(--size-caption)/var(--lh) var(--x-mono); color: var(--text-secondary); letter-spacing: 0.04em; }
+
+      .x-turn { display: flex; justify-content: flex-end; padding-block: 8px 4px; }
+      .x-turn--back { justify-content: flex-start; }
+
+      /* Toast */
+      .x-toast { position: fixed; left: 50%; bottom: calc(env(safe-area-inset-bottom, 0px) + 24px); z-index: 50; transform: translate(-50%, 12px); padding: 10px 16px; border-radius: var(--r-pill); background: var(--fill-primary); color: var(--text-primary-on); font: var(--weight-regular) var(--size-caption)/var(--lh) var(--x-mono); box-shadow: var(--hark-shadow); opacity: 0; pointer-events: none; transition: opacity var(--dur-quick) var(--ease-out), transform var(--dur-quick) var(--ease-out); white-space: nowrap; }
+      .x-toast.is-on { opacity: 1; transform: translate(-50%, 0); }
+      @media (prefers-reduced-motion: reduce) { .x-row, .x-row__shot img, .x-arrow, .x-icon__disc { transition: none; } .x-row:hover, .x-row:hover .x-row__shot img { transform: none; } }
+    </style>
+  </head>
+  <body>
+    <div class="page" id="top">
+      <header class="x-bar" id="x-bar" data-cur="build">
+        <span class="x-count" aria-hidden="true"><span class="x-odo"><span class="x-odo__col"><span>01</span><span>02</span></span></span>/ 02</span>
+        <div class="x-capwrap">
+          <div class="x-cap" role="tablist" aria-label="Pages">
+            <span class="x-thumb" aria-hidden="true"></span>
+            <a class="x-tab x-tab--build" id="tab-build" role="tab" href="#build" data-turn="build" aria-controls="pg-build" aria-selected="true" tabindex="0"><span class="x-brk" aria-hidden="true"><i>{</i><i>}</i></span><span class="x-word">Build</span></a>
+            <a class="x-tab x-tab--break" id="tab-break" role="tab" href="#break" data-turn="break" aria-controls="pg-break" aria-selected="false" tabindex="-1"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M12 3 4 6v6c0 4.5 3.4 8.3 8 9 4.6-.7 8-4.5 8-9V6z"/><path d="m12.5 4.5-2 5 3 2.5-2.5 4 1 3.5"/></svg><span class="x-word">Break</span></a>
+          </div>
+          <span class="x-prog" aria-hidden="true"><span id="x-prog"></span></span>
+        </div>
+        <span class="x-themewrap"><button class="theme-btn" id="theme-btn" type="button" aria-label="Switch to dark theme"></button></span>
+      </header>
+      <main class="main">
+        <div class="x-shell">
+        <aside class="x-side" aria-label="Profile">
+          <div class="x-side__id">
+            <img class="x-side__avatar" src="avatar.webp" alt="" width="88" height="88" />
+            <div>
+              <p class="x-label">Web3 builder · security researcher</p>
+              <p class="x-side__name">Shaydez</p>
+            </div>
+          </div>
+          <div class="x-side__btns">
+            <a class="x-pill x-pill--red" href="mailto:shaydyting@gmail.com">Hire me</a>
+            <a class="x-pill" href="https://github.com/Shaydez-Defi" target="_blank" rel="noopener">GitHub</a>
+          </div>
+          <nav class="x-side__nav" aria-label="Sections">
+            <ul>
+              <li><a href="#build" data-goto="home" class="is-active"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M3 10.5 12 3l9 7.5V20a1 1 0 0 1-1 1h-5v-6h-6v6H4a1 1 0 0 1-1-1z"/></svg>Home</a></li>
+              <li><a href="#build" data-goto="builds"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><rect x="3" y="3" width="7" height="7" rx="1.5"/><rect x="14" y="3" width="7" height="7" rx="1.5"/><rect x="3" y="14" width="7" height="7" rx="1.5"/><rect x="14" y="14" width="7" height="7" rx="1.5"/></svg>Builds<span class="x-mono">05</span></a></li>
+              <li><a href="#build" data-goto="stack"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="m12 3 9 5-9 5-9-5z"/><path d="m3 13 9 5 9-5"/></svg>Stack</a></li>
+              <li><a href="#break" data-turn="break" data-goto="breaks"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M12 3 4 6v6c0 4.5 3.4 8.3 8 9 4.6-.7 8-4.5 8-9V6z"/><path d="m9.5 12 2 2 3.5-4"/></svg>Breaks<span class="x-mono">02</span></a></li>
+              <li><a href="#build" data-goto="contact"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M21 12a8 8 0 0 1-11.6 7.1L4 20l1-4.6A8 8 0 1 1 21 12z"/></svg>Contact</a></li>
+            </ul>
+          </nav>
+        </aside>
+
+        <div class="x-book">
+        <div class="x-pg" data-page="build" id="pg-build" role="tabpanel" aria-labelledby="tab-build">
+        <section class="x-card x-hero x-sec" id="home" aria-labelledby="hero-title">
+          <div class="x-hero__frame"><img src="avatar.webp" alt="Shaydez's profile avatar" width="400" height="400" /></div>
+          <div>
+            <p class="x-hero__hey">Hey there, I'm</p>
+            <h1 id="hero-title">Shaydez</h1>
+            <p class="x-meta"><span class="x-live">Open to work &amp; audits</span></p>
+            <p class="x-hero__statement">I build onchain products and <em>break</em> onchain code.</p>
+            <a class="x-cta" href="mailto:shaydyting@gmail.com"><span class="x-pill x-pill--red">Hire me</span><span class="x-arrow" aria-hidden="true"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12h14M13 6l6 6-6 6"/></svg></span></a>
+          </div>
+        </section>
+
+        <section class="x-marquee" aria-label="Shipped on">
+          <p class="x-marquee__lead">Shipped on:</p>
+          <div class="x-marquee__view">
+            <div class="x-marquee__track">
+              <ul><li>Somnia</li><li>Flare</li><li>Aave</li><li>iExec Nox</li><li>Monad</li><li>Creditcoin</li><li>Attestcoin</li><li>Ethereum Sepolia</li></ul>
+              <ul aria-hidden="true"><li>Somnia</li><li>Flare</li><li>Aave</li><li>iExec Nox</li><li>Monad</li><li>Creditcoin</li><li>Attestcoin</li><li>Ethereum Sepolia</li></ul>
+            </div>
+          </div>
+        </section>
+
+        <section class="x-bio" aria-label="Biography">
+          <p class="x-tag x-tag--label" style="font-size: var(--size-caption)">Biography</p>
+          <p>Full-stack Web3 developer and independent smart-contract security researcher. <span>EVM-first, Solana when it counts.</span> I ship working apps end to end, and I read other people's contracts looking for what they missed. <span>Direct disclosure only.</span></p>
+        </section>
+
+        <section class="x-stats" aria-label="Proof">
+          <div class="x-card"><span class="x-stat__fig">5<sup>+</sup></span><span class="x-stat__label">Live apps</span></div>
+          <div class="x-card"><span class="x-stat__fig">29<sup>+</sup></span><span class="x-stat__label">Public repos</span></div>
+          <div class="x-card"><span class="x-stat__fig">5<sup>+</sup></span><span class="x-stat__label">Chains shipped on</span></div>
+          <div class="x-card"><span class="x-stat__fig">2<sup>+</sup></span><span class="x-stat__label">Tracks: build + break</span></div>
+        </section>
+
+        <section class="x-sec" id="builds" aria-labelledby="builds-title">
+          <div class="x-head">
+            <p class="x-tag x-tag--label">Selected work</p>
+            <h2 id="builds-title">Builds</h2>
+            <p class="x-head__sub">Five live apps, each on a different chain. Every one is deployed and open source.</p>
+          </div>
+          <div class="x-filters" role="group" aria-label="Filter builds">
+            <button type="button" data-filter="all" aria-pressed="true">All</button>
+            <button type="button" data-filter="payments" aria-pressed="false">Payments</button>
+            <button type="button" data-filter="trading" aria-pressed="false">Trading</button>
+            <button type="button" data-filter="lending" aria-pressed="false">Lending</button>
+            <button type="button" data-filter="privacy" aria-pressed="false">Privacy</button>
+            <button type="button" data-filter="identity" aria-pressed="false">Identity</button>
+          </div>
+          <ul class="x-rows" id="rows">
+            <li class="x-row x-row--first" data-cat="trading">
+              <span class="x-row__tab" aria-hidden="true">✦ PROJECT 01</span>
+              <div class="x-row__top"><span class="x-row__idx">[001]</span>
+                <div class="x-row__body">
+                  <h3>Sooth</h3>
+                  <p class="x-row__pitch">Trade intelligence for DreamDEX Event Contracts: reads the live order book, prices the edge, answers TRADE, WATCH or NO TRADE with reasons.</p>
+                  <a class="x-row__code" href="https://github.com/Shaydez-Defi/sooth" target="_blank" rel="noopener">Code ↗</a>
+                </div>
+              </div>
+              <figure class="x-row__shot"><img src="shot-sooth.jpg" alt="Screenshot of the Sooth app" loading="lazy" /></figure>
+              <div class="x-row__stack"><span class="x-label">Stack</span><ul><li>Somnia testnet</li><li>on-chain CLOB</li><li>trading bot</li></ul></div>
+              <a class="x-row__go" href="https://sooth-gray.vercel.app" target="_blank" rel="noopener" aria-label="Sooth, live app"><span class="x-arrow" aria-hidden="true"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12h14M13 6l6 6-6 6"/></svg></span><span class="x-row__go-label">Live</span></a>
+            </li>
+            <li class="x-row" data-cat="payments">
+              <span class="x-row__tab" aria-hidden="true">✦ PROJECT 02</span>
+              <div class="x-row__top"><span class="x-row__idx">[002]</span>
+                <div class="x-row__body">
+                  <h3>Seira</h3>
+                  <p class="x-row__pitch">Intent-based cross-chain settlement: pay with what you hold, the merchant receives what they asked for. One confirmation.</p>
+                  <a class="x-row__code" href="https://github.com/Shaydez-Defi/seira" target="_blank" rel="noopener">Code ↗</a>
+                </div>
+              </div>
+              <figure class="x-row__shot"><img src="shot-seira.jpg" alt="Screenshot of the Seira app" loading="lazy" /></figure>
+              <div class="x-row__stack"><span class="x-label">Stack</span><ul><li>Flare</li><li>FXRP→USDT0</li><li>payments</li></ul></div>
+              <a class="x-row__go" href="https://seira-dun.vercel.app" target="_blank" rel="noopener" aria-label="Seira, live app"><span class="x-arrow" aria-hidden="true"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12h14M13 6l6 6-6 6"/></svg></span><span class="x-row__go-label">Live</span></a>
+            </li>
+            <li class="x-row" data-cat="privacy lending">
+              <span class="x-row__tab" aria-hidden="true">✦ PROJECT 03</span>
+              <div class="x-row__top"><span class="x-row__idx">[003]</span>
+                <div class="x-row__body">
+                  <h3>hýdan</h3>
+                  <p class="x-row__pitch">A confidential account layer for Aave: borrow without broadcasting your balance sheet.</p>
+                  <a class="x-row__code" href="https://github.com/Shaydez-Defi/hydan" target="_blank" rel="noopener">Code ↗</a>
+                </div>
+              </div>
+              <figure class="x-row__shot"><img src="shot-hydan.jpg" alt="Screenshot of the hýdan app" loading="lazy" /></figure>
+              <div class="x-row__stack"><span class="x-label">Stack</span><ul><li>Aave</li><li>Nox / iExec confidential compute</li><li>Sepolia</li><li>iExec WTF Hackathon 2026</li></ul></div>
+              <a class="x-row__go" href="https://hydan.vercel.app" target="_blank" rel="noopener" aria-label="hýdan, live app"><span class="x-arrow" aria-hidden="true"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12h14M13 6l6 6-6 6"/></svg></span><span class="x-row__go-label">Live</span></a>
+            </li>
+            <li class="x-row" data-cat="lending">
+              <span class="x-row__tab" aria-hidden="true">✦ PROJECT 04</span>
+              <div class="x-row__top"><span class="x-row__idx">[004]</span>
+                <div class="x-row__body">
+                  <h3>Sentinelle</h3>
+                  <p class="x-row__pitch">Liquidation guard that checks health every block and self-deleverages a slice of collateral to repay debt before liquidation hits.</p>
+                  <a class="x-row__code" href="https://github.com/Shaydez-Defi/sentinelle" target="_blank" rel="noopener">Code ↗</a>
+                </div>
+              </div>
+              <figure class="x-row__shot"><img src="shot-sentinelle.jpg" alt="Screenshot of the Sentinelle app" loading="lazy" /></figure>
+              <div class="x-row__stack"><span class="x-label">Stack</span><ul><li>Monad testnet</li><li>lending</li><li>automation</li></ul></div>
+              <a class="x-row__go" href="https://sentinelle-tau.vercel.app" target="_blank" rel="noopener" aria-label="Sentinelle, live app"><span class="x-arrow" aria-hidden="true"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12h14M13 6l6 6-6 6"/></svg></span><span class="x-row__go-label">Live</span></a>
+            </li>
+            <li class="x-row" data-cat="identity">
+              <span class="x-row__tab" aria-hidden="true">✦ PROJECT 05</span>
+              <div class="x-row__top"><span class="x-row__idx">[005]</span>
+                <div class="x-row__body">
+                  <h3>TRU</h3>
+                  <p class="x-row__pitch">Verified economic history for agents: cross-chain events proven via Attestcoin, verified with replay protection, recorded on Creditcoin as a reusable Agent Passport.</p>
+                  <a class="x-row__code" href="https://github.com/Shaydez-Defi/tru" target="_blank" rel="noopener">Code ↗</a>
+                </div>
+              </div>
+              <figure class="x-row__shot"><img src="shot-tru.jpg" alt="Screenshot of the TRU app" loading="lazy" /></figure>
+              <div class="x-row__stack"><span class="x-label">Stack</span><ul><li>Creditcoin</li><li>Attestcoin</li><li>Ethereum Sepolia</li><li>agents</li></ul></div>
+              <a class="x-row__go" href="https://tru-ctc.vercel.app" target="_blank" rel="noopener" aria-label="TRU, live app"><span class="x-arrow" aria-hidden="true"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12h14M13 6l6 6-6 6"/></svg></span><span class="x-row__go-label">Live</span></a>
+            </li>
+          </ul>
+          <p class="x-more"><a class="link" href="https://github.com/Shaydez-Defi" target="_blank" rel="noopener">More on GitHub →</a></p>
+        </section>
+
+        <section class="x-sec" id="stack" aria-labelledby="stack-title">
+          <div class="x-head">
+            <p class="x-tag x-tag--label">My toolkit</p>
+            <h2 id="stack-title">Stack</h2>
+          </div>
+          <ul class="x-kit">
+            <li tabindex="0" style="--brand: #8C8C8C"><span class="x-kit__logo"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M4.409 6.608L7.981.255l3.572 6.353H4.409zM8.411 0l3.569 6.348L15.552 0H8.411zm4.036 17.392l3.572 6.354 3.575-6.354h-7.147zm-.608-10.284h-7.43l3.715 6.605 3.715-6.605zm.428-.25h7.428L15.982.255l-3.715 6.603zM15.589 24l-3.569-6.349L8.448 24h7.141zm-3.856-6.858H4.306l3.712 6.603 3.715-6.603zm.428-.25h7.433l-3.718-6.605-3.715 6.605z"/></svg></span><span class="x-kit__name">Solidity</span></li>
+            <li tabindex="0"><span class="x-kit__logo"><img src="foundry-mark.png" alt="" /></span><span class="x-kit__name">Foundry</span></li>
+            <li tabindex="0" style="--brand: #3178C6"><span class="x-kit__logo"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M1.125 0C.502 0 0 .502 0 1.125v21.75C0 23.498.502 24 1.125 24h21.750c.623 0 1.125-.502 1.125-1.125V1.125C24 .502 23.498 0 22.875 0zm17.363 9.75c.612 0 1.154.037 1.627.111a6.38 6.38 0 0 1 1.306.34v2.458a3.950 3.950 0 0 0-.643-.361 5.093 5.093 0 0 0-.717-.26 5.453 5.453 0 0 0-1.426-.2c-.3 0-.573.028-.819.086a2.100 2.100 0 0 0-.623.242c-.17.104-.3.229-.393.374a.888.888 0 0 0-.14.49c0 .196.053.373.156.529.104.156.252.304.443.444s.423.276.696.41c.273.135.582.274.926.416.47.197.892.407 1.266.628.374.222.695.473.963.753.268.279.472.598.614.957.142.359.214.776.214 1.253 0 .657-.125 1.21-.373 1.656a3.033 3.033 0 0 1-1.012 1.085 4.380 4.380 0 0 1-1.487.596c-.566.12-1.163.18-1.79.18a9.916 9.916 0 0 1-1.84-.164 5.544 5.544 0 0 1-1.512-.493v-2.63a5.033 5.033 0 0 0 3.237 1.200c.333 0 .624-.03.872-.09.249-.06.456-.144.623-.25.166-.108.29-.234.373-.38a1.023 1.023 0 0 0-.074-1.089 2.120 2.120 0 0 0-.537-.5 5.597 5.597 0 0 0-.807-.444 27.720 27.720 0 0 0-1.007-.436c-.918-.383-1.602-.852-2.053-1.405-.45-.553-.676-1.222-.676-2.005 0-.614.123-1.141.369-1.582.246-.441.58-.804 1.004-1.089a4.494 4.494 0 0 1 1.47-.629 7.536 7.536 0 0 1 1.77-.201zm-15.113.188h9.563v2.166H9.506v9.646H6.789v-9.646H3.375z"/></svg></span><span class="x-kit__name">TypeScript</span></li>
+            <li tabindex="0" style="--brand: #61DAFB"><span class="x-kit__logo"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M14.23 12.004a2.236 2.236 0 0 1-2.235 2.236 2.236 2.236 0 0 1-2.236-2.236 2.236 2.236 0 0 1 2.235-2.236 2.236 2.236 0 0 1 2.236 2.236zm2.648-10.69c-1.346 0-3.107.96-4.888 2.622-1.78-1.653-3.542-2.602-4.887-2.602-.41 0-.783.093-1.106.278-1.375.793-1.683 3.264-.973 6.365C1.98 8.917 0 10.42 0 12.004c0 1.59 1.99 3.097 5.043 4.03-.704 3.113-.39 5.588.988 6.38.32.187.69.275 1.102.275 1.345 0 3.107-.96 4.888-2.624 1.78 1.654 3.542 2.603 4.887 2.603.41 0 .783-.09 1.106-.275 1.374-.792 1.683-3.263.973-6.365C22.020 15.096 24 13.59 24 12.004c0-1.59-1.99-3.097-5.043-4.032.704-3.11.39-5.587-.988-6.38-.318-.184-.688-.277-1.092-.278zm-.005 1.09v.006c.225 0 .406.044.558.127.666.382.955 1.835.73 3.704-.054.46-.142.945-.25 1.44-.96-.236-2.006-.417-3.107-.534-.66-.905-1.345-1.727-2.035-2.447 1.592-1.48 3.087-2.292 4.105-2.295zm-9.77.02c1.012 0 2.514.808 4.11 2.28-.686.72-1.37 1.537-2.02 2.442-1.107.117-2.154.298-3.113.538-.112-.49-.195-.964-.254-1.42-.23-1.868.054-3.32.714-3.707.19-.09.4-.127.563-.132zm4.882 3.05c.455.468.91.992 1.36 1.564-.44-.02-.89-.034-1.345-.034-.46 0-.915.01-1.36.034.44-.572.895-1.096 1.345-1.565zM12 8.1c.74 0 1.477.034 2.202.093.406.582.802 1.203 1.183 1.86.372.64.71 1.29 1.018 1.946-.308.655-.646 1.31-1.013 1.95-.38.66-.773 1.288-1.18 1.87-.728.063-1.466.098-2.21.098-.74 0-1.477-.035-2.202-.093-.406-.582-.802-1.204-1.183-1.86-.372-.64-.71-1.29-1.018-1.946.303-.657.646-1.313 1.013-1.954.38-.66.773-1.286 1.18-1.868.728-.064 1.466-.098 2.21-.098zm-3.635.254c-.24.377-.48.763-.704 1.16-.225.39-.435.782-.635 1.174-.265-.656-.49-1.31-.676-1.947.64-.15 1.315-.283 2.015-.386zm7.26 0c.695.103 1.365.23 2.006.387-.18.632-.405 1.282-.66 1.933-.2-.39-.41-.783-.64-1.174-.225-.392-.465-.774-.705-1.146zm3.063.675c.484.15.944.317 1.375.498 1.732.74 2.852 1.708 2.852 2.476-.005.768-1.125 1.74-2.857 2.475-.42.18-.88.342-1.355.493-.28-.958-.646-1.956-1.1-2.98.45-1.017.81-2.01 1.085-2.964zm-13.395.004c.278.96.645 1.957 1.1 2.98-.45 1.017-.812 2.01-1.086 2.964-.484-.15-.944-.318-1.37-.5-1.732-.737-2.852-1.706-2.852-2.474 0-.768 1.12-1.742 2.852-2.476.42-.18.88-.342 1.356-.494zm11.678 4.28c.265.657.49 1.312.676 1.948-.64.157-1.316.29-2.016.39.24-.375.48-.762.705-1.158.225-.39.435-.788.636-1.18zm-9.945.02c.2.392.41.783.64 1.175.23.39.465.772.705 1.143-.695-.102-1.365-.23-2.006-.386.18-.63.406-1.282.66-1.933zM17.92 16.32c.112.493.2.968.254 1.423.23 1.868-.054 3.32-.714 3.708-.147.09-.338.128-.563.128-1.012 0-2.514-.807-4.11-2.28.686-.72 1.37-1.536 2.020-2.44 1.107-.118 2.154-.3 3.113-.54zm-11.83.01c.96.234 2.006.415 3.107.532.66.905 1.345 1.727 2.035 2.446-1.595 1.483-3.092 2.295-4.11 2.295-.22-.005-.406-.05-.553-.132-.666-.38-.955-1.834-.73-3.703.054-.46.142-.944.25-1.438zm4.56.64c.44.02.89.034 1.345.034.46 0 .915-.01 1.36-.034-.44.572-.895 1.095-1.345 1.565-.455-.47-.91-.993-1.36-1.565z"/></svg></span><span class="x-kit__name">React</span></li>
+            <li tabindex="0"><span class="x-kit__logo"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M18.665 21.978C16.758 23.255 14.465 24 12 24 5.377 24 0 18.623 0 12S5.377 0 12 0s12 5.377 12 12c0 3.583-1.574 6.801-4.067 9.001L9.219 7.2H7.2v9.596h1.615V9.251l9.85 12.727Zm-3.332-8.533 1.6 2.061V7.2h-1.6v6.245Z"/></svg></span><span class="x-kit__name">Next.js</span></li>
+            <li tabindex="0" style="--brand: #5FA04E"><span class="x-kit__logo"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M11.998,24c-0.321,0-0.641-0.084-0.922-0.247l-2.936-1.737c-0.438-0.245-0.224-0.332-0.08-0.383 c0.585-0.203,0.703-0.25,1.328-0.604c0.065-0.037,0.151-0.023,0.218,0.017l2.256,1.339c0.082,0.045,0.197,0.045,0.272,0l8.795-5.076 c0.082-0.047,0.134-0.141,0.134-0.238V6.921c0-0.099-0.053-0.192-0.137-0.242l-8.791-5.072c-0.081-0.047-0.189-0.047-0.271,0 L3.075,6.68C2.99,6.729,2.936,6.825,2.936,6.921v10.15c0,0.097,0.054,0.189,0.139,0.235l2.409,1.392 c1.307,0.654,2.108-0.116,2.108-0.89V7.787c0-0.142,0.114-0.253,0.256-0.253h1.115c0.139,0,0.255,0.112,0.255,0.253v10.021 c0,1.745-0.95,2.745-2.604,2.745c-0.508,0-0.909,0-2.026-0.551L2.28,18.675c-0.57-0.329-0.922-0.945-0.922-1.604V6.921 c0-0.659,0.353-1.275,0.922-1.603l8.795-5.082c0.557-0.315,1.296-0.315,1.848,0l8.794,5.082c0.57,0.329,0.924,0.944,0.924,1.603 v10.15c0,0.659-0.354,1.273-0.924,1.604l-8.794,5.078C12.643,23.916,12.324,24,11.998,24z M19.099,13.993 c0-1.9-1.284-2.406-3.987-2.763c-2.731-0.361-3.009-0.548-3.009-1.187c0-0.528,0.235-1.233,2.258-1.233 c1.807,0,2.473,0.389,2.747,1.607c0.024,0.115,0.129,0.199,0.247,0.199h1.141c0.071,0,0.138-0.031,0.186-0.081 c0.048-0.054,0.074-0.123,0.067-0.196c-0.177-2.098-1.571-3.076-4.388-3.076c-2.508,0-4.004,1.058-4.004,2.833 c0,1.925,1.488,2.457,3.895,2.695c2.88,0.282,3.103,0.703,3.103,1.269c0,0.983-0.789,1.402-2.642,1.402 c-2.327,0-2.839-0.584-3.011-1.742c-0.02-0.124-0.126-0.215-0.253-0.215h-1.137c-0.141,0-0.254,0.112-0.254,0.253 c0,1.482,0.806,3.248,4.655,3.248C17.501,17.007,19.099,15.910,19.099,13.993z"/></svg></span><span class="x-kit__name">Node.js</span></li>
+            <li tabindex="0"><span class="x-kit__logo x-kit__logo--wide"><img src="viem.svg" alt="" /></span><span class="x-kit__name">Viem</span></li>
+            <li tabindex="0"><span class="x-kit__logo x-kit__logo--wide"><img src="wagmi.svg" alt="" /></span><span class="x-kit__name">Wagmi</span></li>
+            <li tabindex="0"><span class="x-kit__logo"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M23.8346 11.7033l-1.0073-.6236a13.7268 13.7268 0 00-.0283-.2936l.8656-.8069a.3483.3483 0 00-.1154-.578l-1.1066-.414a8.4958 8.4958 0 00-.087-.2856l.6904-.9587a.3462.3462 0 00-.2257-.5446l-1.1663-.1894a9.3574 9.3574 0 00-.1407-.2622l.49-1.0761a.3437.3437 0 00-.0274-.3361.3486.3486 0 00-.3006-.154l-1.1845.0416a6.7444 6.7444 0 00-.1873-.2268l.2723-1.153a.3472.3472 0 00-.417-.4172l-1.1532.2724a14.0183 14.0183 0 00-.2278-.1873l.0415-1.1845a.3442.3442 0 00-.49-.328l-1.076.491c-.0872-.0476-.1742-.0952-.2623-.1407l-.1903-1.1673A.3483.3483 0 0016.256.955l-.9597.6905a8.4867 8.4867 0 00-.2855-.086l-.414-1.1066a.3483.3483 0 00-.5781-.1154l-.8069.8666a9.2936 9.2936 0 00-.2936-.0284L12.2946.1683a.3462.3462 0 00-.5892 0l-.6236 1.0073a13.7383 13.7383 0 00-.2936.0284L9.9803.3374a.3462.3462 0 00-.578.1154l-.4141 1.1065c-.0962.0274-.1903.0567-.2855.086L7.744.955a.3483.3483 0 00-.5447.2258L7.009 2.348a9.3574 9.3574 0 00-.2622.1407l-1.0762-.491a.3462.3462 0 00-.49.328l.0416 1.1845a7.9826 7.9826 0 00-.2278.1873L3.8413 3.425a.3472.3472 0 00-.4171.4171l.2713 1.1531c-.0628.075-.1255.1509-.1863.2268l-1.1845-.0415a.3462.3462 0 00-.328.49l.491 1.0761a9.167 9.167 0 00-.1407.2622l-1.1662.1894a.3483.3483 0 00-.2258.5446l.6904.9587a13.303 13.303 0 00-.087.2855l-1.1065.414a.3483.3483 0 00-.1155.5781l.8656.807a9.2936 9.2936 0 00-.0283.2935l-1.0073.6236a.3442.3442 0 000 .5892l1.0073.6236c.008.0982.0182.1964.0283.2936l-.8656.8079a.3462.3462 0 00.1155.578l1.1065.4141c.0273.0962.0567.1914.087.2855l-.6904.9587a.3452.3452 0 00.2268.5447l1.1662.1893c.0456.088.0922.1751.1408.2622l-.491 1.0762a.3462.3462 0 00.328.49l1.1834-.0415c.0618.0769.1235.1528.1873.2277l-.2713 1.1541a.3462.3462 0 00.4171.4161l1.153-.2713c.075.0638.151.1255.2279.1863l-.0415 1.1845a.3442.3442 0 00.49.327l1.0761-.49c.087.0486.1741.0951.2622.1407l.1903 1.1662a.3483.3483 0 00.5447.2268l.9587-.6904a9.299 9.299 0 00.2855.087l.414 1.1066a.3452.3452 0 00.5781.1154l.8079-.8656c.0972.0111.1954.0203.2936.0294l.6236 1.0073a.3472.3472 0 00.5892 0l.6236-1.0073c.0982-.0091.1964-.0183.2936-.0294l.8069.8656a.3483.3483 0 00.578-.1154l.4141-1.1066a8.4626 8.4626 0 00.2855-.087l.9587.6904a.3452.3452 0 00.5447-.2268l.1903-1.1662c.088-.0456.1751-.0931.2622-.1407l1.0762.49a.3472.3472 0 00.49-.327l-.0415-1.1845a6.7267 6.7267 0 00.2267-.1863l1.1531.2713a.3472.3472 0 00.4171-.416l-.2713-1.1542c.0628-.0749.1255-.1508.1863-.2278l1.1845.0415a.3442.3442 0 00.328-.49l-.49-1.076c.0475-.0872.0951-.1742.1407-.2623l1.1662-.1893a.3483.3483 0 00.2258-.5447l-.6904-.9587.087-.2855 1.1066-.414a.3462.3462 0 00.1154-.5781l-.8656-.8079c.0101-.0972.0202-.1954.0283-.2936l1.0073-.6236a.3442.3442 0 000-.5892zm-6.7413 8.3551a.7138.7138 0 01.2986-1.396.714.714 0 11-.2997 1.396zm-.3422-2.3142a.649.649 0 00-.7715.5l-.3573 1.6685c-1.1035.501-2.3285.7795-3.6193.7795a8.7368 8.7368 0 01-3.6951-.814l-.3574-1.6684a.648.648 0 00-.7714-.499l-1.473.3158a8.7216 8.7216 0 01-.7613-.898h7.1676c.081 0 .1356-.0141.1356-.088v-2.536c0-.074-.0536-.0881-.1356-.0881h-2.0966v-1.6077h2.2677c.2065 0 1.1065.0587 1.394 1.2088.0901.3533.2875 1.5044.4232 1.8729.1346.413.6833 1.2381 1.2685 1.2381h3.5716a.7492.7492 0 00.1296-.0131 8.7874 8.7874 0 01-.8119.9526zM6.8369 20.024a.714.714 0 11-.2997-1.396.714.714 0 01.2997 1.396zM4.1177 8.9972a.7137.7137 0 11-1.304.5791.7137.7137 0 011.304-.579zm-.8352 1.9813l1.5347-.6824a.65.65 0 00.33-.8585l-.3158-.7147h1.2432v5.6025H3.5669a8.7753 8.7753 0 01-.2834-3.348zm6.7343-.5437V8.7836h2.9601c.153 0 1.0792.1772 1.0792.8697 0 .575-.7107.7815-1.2948.7815zm10.7574 1.4862c0 .2187-.008.4363-.0243.651h-.9c-.09 0-.1265.0586-.1265.1477v.413c0 .973-.5487 1.1846-1.0296 1.2382-.4576.0517-.9648-.1913-1.0275-.4717-.2704-1.5186-.7198-1.8436-1.4305-2.4034.8817-.5599 1.799-1.386 1.799-2.4915 0-1.1936-.819-1.9458-1.3769-2.3153-.7825-.5163-1.6491-.6195-1.883-.6195H5.4682a8.7651 8.7651 0 014.907-2.7699l1.0974 1.151a.648.648 0 00.9182.0213l1.227-1.1743a8.7753 8.7753 0 016.0044 4.2762l-.8403 1.8982a.652.652 0 00.33.8585l1.6178.7188c.0283.2875.0425.577.0425.8717zm-9.3006-9.5993a.7128.7128 0 11.984 1.0316.7137.7137 0 01-.984-1.0316zm8.3389 6.71a.7107.7107 0 01.9395-.3625.7137.7137 0 11-.9405.3635z"/></svg></span><span class="x-kit__name">Rust</span></li>
+            <li tabindex="0" style="--brand: #9945FF"><span class="x-kit__logo"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="m23.8764 18.0313-3.962 4.1393a.9201.9201 0 0 1-.306.2106.9407.9407 0 0 1-.367.0742H.4599a.4689.4689 0 0 1-.2522-.0733.4513.4513 0 0 1-.1696-.1962.4375.4375 0 0 1-.0314-.2545.4438.4438 0 0 1 .117-.2298l3.9649-4.1393a.92.92 0 0 1 .3052-.2102.9407.9407 0 0 1 .3658-.0746H23.54a.4692.4692 0 0 1 .2523.0734.4531.4531 0 0 1 .1697.196.438.438 0 0 1 .0313.2547.4442.4442 0 0 1-.1169.2297zm-3.962-8.3355a.9202.9202 0 0 0-.306-.2106.941.941 0 0 0-.367-.0742H.4599a.4687.4687 0 0 0-.2522.0734.4513.4513 0 0 0-.1696.1961.4376.4376 0 0 0-.0314.2546.444.444 0 0 0 .117.2297l3.9649 4.1394a.9204.9204 0 0 0 .3052.2102c.1154.049.24.0744.3658.0746H23.54a.469.469 0 0 0 .2523-.0734.453.453 0 0 0 .1697-.1961.4382.4382 0 0 0 .0313-.2546.4444.4444 0 0 0-.1169-.2297zM.46 6.7225h18.7815a.9411.9411 0 0 0 .367-.0742.9202.9202 0 0 0 .306-.2106l3.962-4.1394a.4442.4442 0 0 0 .117-.2297.4378.4378 0 0 0-.0314-.2546.453.453 0 0 0-.1697-.196.469.469 0 0 0-.2523-.0734H4.7596a.941.941 0 0 0-.3658.0745.9203.9203 0 0 0-.3052.2102L.1246 5.9687a.4438.4438 0 0 0-.1169.2295.4375.4375 0 0 0 .0312.2544.4512.4512 0 0 0 .1692.196.4689.4689 0 0 0 .2518.0739z"/></svg></span><span class="x-kit__name">Solana</span></li>
+            <li tabindex="0"><span class="x-kit__logo"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="m12 1.608 12 20.784H0Z"/></svg></span><span class="x-kit__name">Vercel</span></li>
+          </ul>
+        </section>
+
+        <section class="x-card x-contact x-sec" id="contact" aria-labelledby="contact-title">
+          <p class="x-tag x-tag--label" style="justify-self: start">Contact</p>
+          <h2 id="contact-title">Building something onchain, or want your contracts looked at?</h2>
+          <div class="x-contact__row">
+            <ul class="x-icons" aria-label="Contact links">
+              <li><a class="x-icon" href="mailto:shaydyting@gmail.com" aria-label="Email shaydyting@gmail.com" title="Email · shaydyting@gmail.com"><span class="x-icon__disc"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><rect x="3" y="5" width="18" height="14" rx="2"/><path d="m3.5 7 8.5 6 8.5-6"/></svg></span><span class="x-icon__cap">email</span></a></li>
+              <li><a class="x-icon" href="https://github.com/Shaydez-Defi" target="_blank" rel="noopener" aria-label="GitHub: Shaydez-Defi" title="GitHub · Shaydez-Defi"><span class="x-icon__disc"><svg viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><path d="M12 .297c-6.63 0-12 5.373-12 12 0 5.303 3.438 9.8 8.205 11.385.6.113.82-.258.82-.577 0-.285-.01-1.04-.015-2.04-3.338.724-4.042-1.61-4.042-1.61C4.422 18.07 3.633 17.7 3.633 17.7c-1.087-.744.084-.729.084-.729 1.205.084 1.838 1.236 1.838 1.236 1.07 1.835 2.809 1.305 3.495.998.108-.776.417-1.305.76-1.605-2.665-.3-5.466-1.332-5.466-5.93 0-1.31.465-2.38 1.235-3.22-.135-.303-.54-1.523.105-3.176 0 0 1.005-.322 3.3 1.23.96-.267 1.98-.399 3-.405 1.02.006 2.04.138 3 .405 2.28-1.552 3.285-1.23 3.285-1.23.645 1.653.24 2.873.12 3.176.765.84 1.23 1.91 1.23 3.22 0 4.61-2.805 5.625-5.475 5.92.42.36.81 1.096.81 2.22 0 1.606-.015 2.896-.015 3.286 0 .315.21.69.825.57C20.565 22.092 24 17.592 24 12.297c0-6.627-5.373-12-12-12"/></svg></span><span class="x-icon__cap">github</span></a></li>
+              <li><a class="x-icon" href="https://x.com/no_shaydez" target="_blank" rel="noopener" aria-label="X: @no_shaydez" title="X · @no_shaydez"><span class="x-icon__disc"><svg viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><path d="M18.901 1.153h3.68l-8.04 9.19L24 22.846h-7.406l-5.8-7.584-6.638 7.584H.474l8.6-9.83L0 1.154h7.594l5.243 6.932ZM17.61 20.644h2.039L6.486 3.24H4.298Z"/></svg></span><span class="x-icon__cap">x</span></a></li>
+              <li><a class="x-icon" href="https://t.me/no_shaydez" target="_blank" rel="noopener" aria-label="Telegram: @no_shaydez" title="Telegram · @no_shaydez"><span class="x-icon__disc"><svg viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><path d="M11.944 0A12 12 0 0 0 0 12a12 12 0 0 0 12 12 12 12 0 0 0 12-12A12 12 0 0 0 12 0a12 12 0 0 0-.056 0zm4.962 7.224c.1-.002.321.023.465.14a.506.506 0 0 1 .171.325c.016.093.036.306.02.472-.18 1.898-.962 6.502-1.36 8.627-.168.9-.499 1.201-.82 1.23-.696.065-1.225-.46-1.9-.902-1.056-.693-1.653-1.124-2.678-1.8-1.185-.78-.417-1.21.258-1.91.177-.184 3.247-2.977 3.307-3.23.007-.032.014-.15-.056-.212s-.174-.041-.249-.024c-.106.024-1.793 1.14-5.061 3.345-.48.33-.913.49-1.302.48-.428-.008-1.252-.241-1.865-.44-.752-.245-1.349-.374-1.297-.789.027-.216.325-.437.893-.663 3.498-1.524 5.83-2.529 6.998-3.014 3.332-1.386 4.025-1.627 4.476-1.635z"/></svg></span><span class="x-icon__cap">telegram</span></a></li>
+              <!-- Discord: to link directly, replace with https://discord.com/users/<numeric user ID> -->
+              <li><button class="x-icon" type="button" data-copy="no_shaydez" aria-label="Discord: no_shaydez, copy username" title="Discord · no_shaydez (tap to copy)"><span class="x-icon__disc"><svg viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><path d="M20.317 4.37a19.79 19.79 0 0 0-4.885-1.515.074.074 0 0 0-.079.037c-.21.375-.444.865-.608 1.25a18.27 18.27 0 0 0-5.487 0 12.64 12.64 0 0 0-.617-1.25.077.077 0 0 0-.079-.037A19.74 19.74 0 0 0 3.677 4.37a.07.07 0 0 0-.032.028C.533 9.046-.32 13.58.099 18.058a.082.082 0 0 0 .031.056 19.9 19.9 0 0 0 5.993 3.03.078.078 0 0 0 .084-.028c.462-.63.873-1.295 1.226-1.994a.076.076 0 0 0-.042-.106 13.1 13.1 0 0 1-1.872-.892.077.077 0 0 1-.008-.128c.126-.094.252-.192.372-.291a.074.074 0 0 1 .078-.01c3.928 1.793 8.18 1.793 12.061 0a.074.074 0 0 1 .079.009c.12.1.246.198.373.292a.077.077 0 0 1-.007.128 12.3 12.3 0 0 1-1.873.891.077.077 0 0 0-.041.107c.36.698.772 1.363 1.225 1.993a.076.076 0 0 0 .084.029 19.84 19.84 0 0 0 6.002-3.03.077.077 0 0 0 .032-.054c.5-5.177-.838-9.674-3.549-13.66a.061.061 0 0 0-.031-.03zM8.02 15.331c-1.183 0-2.157-1.086-2.157-2.42 0-1.332.956-2.418 2.157-2.418 1.21 0 2.176 1.095 2.157 2.419 0 1.333-.956 2.419-2.157 2.419zm7.975 0c-1.183 0-2.157-1.086-2.157-2.42 0-1.332.955-2.418 2.157-2.418 1.21 0 2.176 1.095 2.157 2.419 0 1.333-.946 2.419-2.157 2.419z"/></svg></span><span class="x-icon__cap">discord</span></button></li>
+            </ul>
+            <a class="x-cta" href="mailto:shaydyting@gmail.com"><span class="x-pill x-pill--red">Hire me</span><span class="x-arrow" aria-hidden="true"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12h14M13 6l6 6-6 6"/></svg></span></a>
+          </div>
+        </section>
+
+        <div class="x-turn"><a class="btn" href="#break" data-turn="break">Next: Break →</a></div>
+        </div>
+
+        <div class="x-pg" data-page="break" id="pg-break" role="tabpanel" aria-labelledby="tab-break" hidden>
+        <section class="x-card x-hero x-hero--solo x-sec" id="breaks" aria-labelledby="breaks-title">
+          <div>
+            <p class="x-hero__hey">Track 02</p>
+            <h1 id="breaks-title">Breaks</h1>
+            <p class="x-meta"><span class="x-live">Open to work &amp; audits</span><span>Direct disclosure only</span></p>
+            <p class="x-hero__statement">Independent smart-contract security research. Disclosed directly to teams.</p>
+            <a class="x-cta" href="mailto:shaydyting@gmail.com"><span class="x-pill x-pill--red">Hire me</span><span class="x-arrow" aria-hidden="true"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12h14M13 6l6 6-6 6"/></svg></span></a>
+          </div>
+        </section>
+
+        <!--
+          BREAK STATS: replace each "—" below with the real figure once findings are public,
+          e.g. <span class="x-stat__fig">3</span>
+        -->
+        <section class="x-stats" aria-label="Findings summary">
+          <div class="x-card"><span class="x-stat__fig">—</span><span class="x-stat__label">Findings</span></div>
+          <div class="x-card"><span class="x-stat__fig">—</span><span class="x-stat__label">Critical / High</span></div>
+          <div class="x-card"><span class="x-stat__fig">—</span><span class="x-stat__label">Fixed</span></div>
+          <div class="x-card"><span class="x-stat__fig">—</span><span class="x-stat__label">Disclosed</span></div>
+        </section>
+
+        <section class="x-card x-ledger-card" aria-labelledby="ledger-title">
+          <p class="x-tag x-tag--label" style="margin-bottom: 14px">Ledger</p>
+          <h2 id="ledger-title">Findings ledger.</h2>
+          <div class="table-wrap">
+            <table class="x-ledger">
+              <thead>
+                <tr>
+                  <th scope="col">Finding</th>
+                  <th scope="col">Severity</th>
+                  <th scope="col">Target</th>
+                  <th scope="col">Status</th>
+                  <th scope="col">Date</th>
+                </tr>
+              </thead>
+              <!--
+                FINDINGS: paste one <tr> per finding inside <tbody id="findings"> below.
+                The empty-state line hides itself as soon as a row exists.
+
+                Row format:
+                <tr>
+                  <th scope="row">Short finding title <small>One-line impact</small></th>
+                  <td><span class="x-sev x-sev--high">High</span></td>
+                  <td>Protocol / contract</td>
+                  <td><span class="x-status x-status--fixed">Fixed</span></td>
+                  <td class="muted">2026-01</td>
+                </tr>
+
+                Severity classes:  x-sev--critical  x-sev--high  x-sev--medium  x-sev--low
+                Status classes:    x-status--disclosed  x-status--fixed  x-status--latent
+              -->
+              <tbody id="findings"></tbody>
+              <tfoot>
+                <tr><td colspan="5">Findings published after disclosure.</td></tr>
+              </tfoot>
+            </table>
+          </div>
+        </section>
+
+        <section class="x-card x-contact" id="contact-break" aria-labelledby="contact-break-title" style="margin-top: 0">
+          <p class="x-tag x-tag--label" style="justify-self: start">Contact</p>
+          <h2 id="contact-break-title">Building something onchain, or want your contracts looked at?</h2>
+          <div class="x-contact__row">
+            <ul class="x-icons" aria-label="Contact links">
+              <li><a class="x-icon" href="mailto:shaydyting@gmail.com" aria-label="Email shaydyting@gmail.com" title="Email · shaydyting@gmail.com"><span class="x-icon__disc"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><rect x="3" y="5" width="18" height="14" rx="2"/><path d="m3.5 7 8.5 6 8.5-6"/></svg></span><span class="x-icon__cap">email</span></a></li>
+              <li><a class="x-icon" href="https://github.com/Shaydez-Defi" target="_blank" rel="noopener" aria-label="GitHub: Shaydez-Defi" title="GitHub · Shaydez-Defi"><span class="x-icon__disc"><svg viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><path d="M12 .297c-6.63 0-12 5.373-12 12 0 5.303 3.438 9.8 8.205 11.385.6.113.82-.258.82-.577 0-.285-.01-1.04-.015-2.04-3.338.724-4.042-1.61-4.042-1.61C4.422 18.07 3.633 17.7 3.633 17.7c-1.087-.744.084-.729.084-.729 1.205.084 1.838 1.236 1.838 1.236 1.07 1.835 2.809 1.305 3.495.998.108-.776.417-1.305.76-1.605-2.665-.3-5.466-1.332-5.466-5.93 0-1.31.465-2.38 1.235-3.22-.135-.303-.54-1.523.105-3.176 0 0 1.005-.322 3.3 1.23.96-.267 1.98-.399 3-.405 1.020.006 2.040.138 3 .405 2.280-1.552 3.285-1.23 3.285-1.23.645 1.653.24 2.873.12 3.176.765.84 1.23 1.91 1.23 3.22 0 4.61-2.805 5.625-5.475 5.92.42.36.81 1.096.81 2.22 0 1.606-.015 2.896-.015 3.286 0 .315.21.69.825.57C20.565 22.092 24 17.592 24 12.297c0-6.627-5.373-12-12-12"/></svg></span><span class="x-icon__cap">github</span></a></li>
+              <li><a class="x-icon" href="https://x.com/no_shaydez" target="_blank" rel="noopener" aria-label="X: @no_shaydez" title="X · @no_shaydez"><span class="x-icon__disc"><svg viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><path d="M18.901 1.153h3.68l-8.04 9.19L24 22.846h-7.406l-5.8-7.584-6.638 7.584H.474l8.6-9.83L0 1.154h7.594l5.243 6.932ZM17.61 20.644h2.039L6.486 3.24H4.298Z"/></svg></span><span class="x-icon__cap">x</span></a></li>
+              <li><a class="x-icon" href="https://t.me/no_shaydez" target="_blank" rel="noopener" aria-label="Telegram: @no_shaydez" title="Telegram · @no_shaydez"><span class="x-icon__disc"><svg viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><path d="M11.944 0A12 12 0 0 0 0 12a12 12 0 0 0 12 12 12 12 0 0 0 12-12A12 12 0 0 0 12 0a12 12 0 0 0-.056 0zm4.962 7.224c.1-.002.321.023.465.14a.506.506 0 0 1 .171.325c.016.093.036.306.02.472-.18 1.898-.962 6.502-1.36 8.627-.168.9-.499 1.201-.82 1.23-.696.065-1.225-.46-1.9-.902-1.056-.693-1.653-1.124-2.678-1.8-1.185-.78-.417-1.21.258-1.91.177-.184 3.247-2.977 3.307-3.23.007-.032.014-.15-.056-.212s-.174-.041-.249-.024c-.106.024-1.793 1.14-5.061 3.345-.48.33-.913.49-1.302.48-.428-.008-1.252-.241-1.865-.44-.752-.245-1.349-.374-1.297-.789.027-.216.325-.437.893-.663 3.498-1.524 5.83-2.529 6.998-3.014 3.332-1.386 4.025-1.627 4.476-1.635z"/></svg></span><span class="x-icon__cap">telegram</span></a></li>
+              <!-- Discord: to link directly, replace with https://discord.com/users/<numeric user ID> -->
+              <li><button class="x-icon" type="button" data-copy="no_shaydez" aria-label="Discord: no_shaydez, copy username" title="Discord · no_shaydez (tap to copy)"><span class="x-icon__disc"><svg viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><path d="M20.317 4.37a19.79 19.79 0 0 0-4.885-1.515.074.074 0 0 0-.079.037c-.21.375-.444.865-.608 1.25a18.27 18.27 0 0 0-5.487 0 12.64 12.64 0 0 0-.617-1.25.077.077 0 0 0-.079-.037A19.74 19.74 0 0 0 3.677 4.37a.07.07 0 0 0-.032.028C.533 9.046-.32 13.58.099 18.058a.082.082 0 0 0 .031.056 19.9 19.9 0 0 0 5.993 3.03.078.078 0 0 0 .084-.028c.462-.63.873-1.295 1.226-1.994a.076.076 0 0 0-.042-.106 13.1 13.1 0 0 1-1.872-.892.077.077 0 0 1-.008-.128c.126-.094.252-.192.372-.291a.074.074 0 0 1 .078-.01c3.928 1.793 8.18 1.793 12.061 0a.074.074 0 0 1 .079.009c.12.1.246.198.373.292a.077.077 0 0 1-.007.128 12.3 12.3 0 0 1-1.873.891.077.077 0 0 0-.041.107c.36.698.772 1.363 1.225 1.993a.076.076 0 0 0 .084.029 19.84 19.84 0 0 0 6.002-3.03.077.077 0 0 0 .032-.054c.5-5.177-.838-9.674-3.549-13.66a.061.061 0 0 0-.031-.03zM8.02 15.331c-1.183 0-2.157-1.086-2.157-2.42 0-1.332.956-2.418 2.157-2.418 1.21 0 2.176 1.095 2.157 2.419 0 1.333-.956 2.419-2.157 2.419zm7.975 0c-1.183 0-2.157-1.086-2.157-2.42 0-1.332.955-2.418 2.157-2.418 1.21 0 2.176 1.095 2.157 2.419 0 1.333-.946 2.419-2.157 2.419z"/></svg></span><span class="x-icon__cap">discord</span></button></li>
+            </ul>
+            <a class="x-cta" href="mailto:shaydyting@gmail.com"><span class="x-pill x-pill--red">Hire me</span><span class="x-arrow" aria-hidden="true"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12h14M13 6l6 6-6 6"/></svg></span></a>
+          </div>
+        </section>
+
+        <div class="x-turn x-turn--back"><a class="btn" href="#build" data-turn="build">← Back: Build</a></div>
+        </div>
+        </div>
+        </div>
+      </main>
+      <footer class="x-foot">
+        <p class="x-mark x-mark--build" aria-hidden="true">BUILD</p>
+        <p class="x-mark x-mark--break" aria-hidden="true">
+          <span class="x-mark__ghost">BREAK</span>
+          <span class="x-mark__half x-mark__half--a">BREAK</span>
+          <span class="x-mark__half x-mark__half--b">BREAK</span>
+          <svg class="x-mark__crack" viewBox="0 0 100 100" preserveAspectRatio="none" aria-hidden="true"><polyline points="59.4,0 55.4,28 51.9,41 48.4,68 43.4,100" /></svg>
+        </p>
+        <p class="x-foot__copy">© 2026 Shaydez</p>
+      </footer>
+    </div>
+    <div class="x-toast" id="x-toast" role="status" aria-live="polite"></div>
+    <script src="hark.js"></script>
+    <script>
+      (function () {
+        var book = document.querySelector(".x-book");
+        var pages = { build: book.querySelector('[data-page="build"]'), brk: book.querySelector('[data-page="break"]') };
+        function el(name) { return name === "break" ? pages.brk : pages.build; }
+        var reduce = window.matchMedia("(prefers-reduced-motion: reduce)");
+        var current = "build", busy = false;
+        var navLinks = [].slice.call(document.querySelectorAll(".x-side__nav a"));
+
+        function setActive(id) {
+          navLinks.forEach(function (a) { a.classList.toggle("is-active", a.getAttribute("data-goto") === id); });
+        }
+        function spy() {
+          if (current === "break") { setActive("breaks"); return; }
+          var ids = ["home", "builds", "stack", "contact"], on = "home";
+          ids.forEach(function (id) {
+            var s = document.getElementById(id);
+            if (s && s.getBoundingClientRect().top < window.innerHeight * 0.4) on = id;
+          });
+          setActive(on);
+        }
+        window.addEventListener("scroll", spy, { passive: true });
+
+        // switch: shrink + backdrop once scrolled, and the scroll progress of the current page
+        var ticking = false;
+        function progress() {
+          var max = document.documentElement.scrollHeight - window.innerHeight;
+          var p = max > 0 ? Math.min(1, Math.max(0, window.scrollY / max)) : 0;
+          if (prog) prog.style.transform = "scaleX(" + p.toFixed(4) + ")";
+          if (bar) bar.classList.toggle("is-stuck", window.scrollY > 8);
+        }
+        function onScroll() {
+          if (ticking) return; ticking = true;
+          requestAnimationFrame(function () { ticking = false; progress(); });
+        }
+        window.addEventListener("scroll", onScroll, { passive: true });
+        window.addEventListener("resize", onScroll);
+
+        // tablist keyboard: arrows, Home and End switch pages
+        document.querySelector(".x-cap").addEventListener("keydown", function (e) {
+          var k = e.key, i = tabs.indexOf(document.activeElement), next = -1;
+          if (i < 0) return;
+          if (k === "ArrowRight" || k === "ArrowDown") next = (i + 1) % tabs.length;
+          else if (k === "ArrowLeft" || k === "ArrowUp") next = (i - 1 + tabs.length) % tabs.length;
+          else if (k === "Home") next = 0;
+          else if (k === "End") next = tabs.length - 1;
+          else if (k === " " || k === "Spacebar") next = i;
+          if (next < 0) return;
+          e.preventDefault();
+          tabs[next].focus();
+          turn(tabs[next].getAttribute("data-turn"), true, function () { progress(); });
+        });
+
+        var bar = document.getElementById("x-bar"), frame = document.getElementById("top");
+        var tabs = [].slice.call(document.querySelectorAll('.x-cap [role="tab"]'));
+        var prog = document.getElementById("x-prog");
+        function setTabs(name) {
+          tabs.forEach(function (a) {
+            var on = a.getAttribute("data-turn") === name;
+            a.setAttribute("aria-selected", on ? "true" : "false");
+            a.tabIndex = on ? 0 : -1;
+          });
+          bar.setAttribute("data-cur", name);
+          frame.setAttribute("data-cur", name);
+          progress();
+          document.title = (name === "break" ? "Break" : "Build") + " · Shaydez Portfolio";
+          setActive(name === "break" ? "breaks" : "home");
+        }
+        function show(name) {
+          el(name).hidden = false;
+          el(name === "break" ? "build" : "break").hidden = true;
+          current = name; setTabs(name);
+        }
+        function clean(p) { p.classList.remove("is-over", "is-under", "is-out", "is-in", "is-lit", "is-dim"); }
+
+        function turn(name, push, after) {
+          if (name !== "build" && name !== "break") name = "build";
+          if (push && location.hash !== "#" + name) history.pushState(null, "", "#" + name);
+          if (name === current) { if (after) after(); else window.scrollTo(0, 0); return; }
+          if (busy) { show(name); window.scrollTo(0, 0); if (after) after(); return; }
+          var from = el(current), to = el(name), forward = name === "break";
+          busy = true;
+          window.scrollTo(0, 0);
+          to.hidden = false;
+          setTabs(name); current = name;
+          var mover, still;
+          if (forward || reduce.matches) {
+            // the current page lifts off its spine and turns away, revealing the next beneath
+            mover = from; still = to;
+            mover.classList.add("is-over", "is-out");
+            still.classList.add("is-under", "is-lit");
+          } else {
+            // turning back: the previous page swings back over from the spine
+            mover = to; still = from;
+            mover.classList.add("is-over", "is-in");
+            still.classList.add("is-under", "is-dim");
+          }
+          var done = false;
+          function finish() {
+            if (done) return; done = true;
+            clean(from); clean(to);
+            from.hidden = true; to.hidden = false;
+            busy = false;
+            progress();
+            if (after) after(); else spy();
+          }
+          mover.addEventListener("animationend", finish, { once: true });
+          setTimeout(finish, 1000);
+        }
+
+        document.addEventListener("click", function (e) {
+          var a = e.target.closest("[data-turn]");
+          if (a) { e.preventDefault(); turn(a.getAttribute("data-turn"), true); return; }
+          // sidebar section links: make sure page 1 is open, then scroll to the section
+          var g = e.target.closest("[data-goto]");
+          if (!g) return;
+          e.preventDefault();
+          var id = g.getAttribute("data-goto");
+          turn("build", true, function () {
+            var s = document.getElementById(id);
+            if (id === "home" || !s) window.scrollTo({ top: 0, behavior: reduce.matches ? "auto" : "smooth" });
+            else s.scrollIntoView({ behavior: reduce.matches ? "auto" : "smooth", block: "start" });
+            setActive(id);
+          });
+        });
+        function fromHash() { var h = location.hash.slice(1); if (h === "build" || h === "break") turn(h, false); }
+        window.addEventListener("popstate", fromHash);
+        window.addEventListener("hashchange", fromHash);
+
+        // initial page from the URL
+        var start = location.hash.slice(1);
+        if (start === "break") show("break");
+        else if (start === "build") show("build");
+        else setTabs("build");
+
+        // swipe left / right to turn pages
+        var sx = 0, sy = 0, t0 = 0, skip = false;
+        book.addEventListener("touchstart", function (e) {
+          var t = e.touches[0]; sx = t.clientX; sy = t.clientY; t0 = Date.now();
+          skip = e.touches.length > 1 || !!e.target.closest(".table-wrap, .x-marquee, .x-filters, input, textarea");
+        }, { passive: true });
+        book.addEventListener("touchend", function (e) {
+          if (skip) return;
+          var t = e.changedTouches[0], dx = t.clientX - sx, dy = t.clientY - sy;
+          if (Math.abs(dx) < 60 || Math.abs(dx) < Math.abs(dy) * 1.5 || Date.now() - t0 > 800) return;
+          if (dx < 0 && current === "build") turn("break", true);
+          else if (dx > 0 && current === "break") turn("build", true);
+        }, { passive: true });
+
+        // Build filters
+        var filterBtns = [].slice.call(document.querySelectorAll("[data-filter]"));
+        var rows = [].slice.call(document.querySelectorAll("#rows .x-row"));
+        filterBtns.forEach(function (b) {
+          b.addEventListener("click", function () {
+            var f = b.getAttribute("data-filter");
+            filterBtns.forEach(function (x) { x.setAttribute("aria-pressed", x === b ? "true" : "false"); });
+            rows.forEach(function (r) {
+              r.hidden = f !== "all" && r.getAttribute("data-cat").split(" ").indexOf(f) < 0;
+            });
+          });
+        });
+
+        // Discord: copy the username and show a toast
+        var toast = document.getElementById("x-toast"), toastT;
+        function say(msg) {
+          toast.textContent = msg; toast.classList.add("is-on");
+          clearTimeout(toastT); toastT = setTimeout(function () { toast.classList.remove("is-on"); }, 2400);
+        }
+        function fallbackCopy(text) {
+          var ta = document.createElement("textarea");
+          ta.value = text; ta.setAttribute("readonly", "");
+          ta.style.position = "fixed"; ta.style.top = "0"; ta.style.left = "0"; ta.style.opacity = "0";
+          document.body.appendChild(ta); ta.select(); ta.setSelectionRange(0, text.length);
+          var ok = false; try { ok = document.execCommand("copy"); } catch (err) { ok = false; }
+          document.body.removeChild(ta);
+          return ok;
+        }
+        document.addEventListener("click", function (e) {
+          var b = e.target.closest("[data-copy]");
+          if (!b) return;
+          var text = b.getAttribute("data-copy");
+          // copy synchronously first (keeps the user gesture), then the async API as a backup
+          var ok = fallbackCopy(text);
+          if (!ok && navigator.clipboard && navigator.clipboard.writeText) {
+            try { navigator.clipboard.writeText(text).catch(function () {}); } catch (err) { /* ignore */ }
+          }
+          say("Discord: " + text + " — copied");
+          var cap = b.querySelector(".x-icon__cap");
+          if (cap) {
+            cap.textContent = "copied";
+            clearTimeout(b._t); b._t = setTimeout(function () { cap.textContent = "discord"; }, 2400);
+          }
+        });
+      })();
+    </script>
+  </body>
+</html>
