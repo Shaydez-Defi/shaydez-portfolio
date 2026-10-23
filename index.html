@@ -349,6 +349,14 @@
       .x-toast { position: fixed; left: 50%; bottom: calc(env(safe-area-inset-bottom, 0px) + 24px); z-index: 50; transform: translate(-50%, 12px); padding: 10px 16px; border-radius: var(--r-pill); background: var(--fill-primary); color: var(--text-primary-on); font: var(--weight-regular) var(--size-caption)/var(--lh) var(--x-mono); box-shadow: var(--hark-shadow); opacity: 0; pointer-events: none; transition: opacity var(--dur-quick) var(--ease-out), transform var(--dur-quick) var(--ease-out); white-space: nowrap; }
       .x-toast.is-on { opacity: 1; transform: translate(-50%, 0); }
       @media (prefers-reduced-motion: reduce) { .x-row, .x-row__shot img, .x-arrow, .x-icon__disc { transition: none; } .x-row:hover, .x-row:hover .x-row__shot img { transform: none; } }
+      /* Sleek themed scrollbar */
+      html { scrollbar-color: color-mix(in srgb, var(--x-red) 75%, transparent) transparent; scrollbar-width: thin; }
+      * { scrollbar-color: color-mix(in srgb, var(--x-red) 75%, transparent) transparent; scrollbar-width: thin; }
+      ::-webkit-scrollbar { width: 6px; height: 6px; }
+      ::-webkit-scrollbar-track { background: transparent; }
+      ::-webkit-scrollbar-thumb { background: color-mix(in srgb, var(--x-red) 70%, transparent); border-radius: 999px; }
+      ::-webkit-scrollbar-thumb:hover { background: var(--x-red); }
+      ::-webkit-scrollbar-corner { background: transparent; }
     </style>
   </head>
   <body>
