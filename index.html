@@ -367,10 +367,18 @@
       /* ---------- Motion ---------- */
       /* Sidebar identity: hidden beside the Build hero on desktop, slides in once the hero is gone */
       @media (min-width: 1024px) {
-        .x-sid .x-side__id { max-height: 260px; transition: opacity 300ms var(--ease-out), transform 300ms var(--ease-out), max-height 300ms var(--ease-out), margin-bottom 300ms var(--ease-out), visibility 0s linear 0s; }
-        .x-sid.is-id-off .x-side__id { max-height: 0; margin-bottom: -22px; opacity: 0; transform: translateY(8px); visibility: hidden; transition: opacity 300ms var(--ease-out), transform 300ms var(--ease-out), max-height 300ms var(--ease-out), margin-bottom 300ms var(--ease-out), visibility 0s linear 300ms; }
+        .x-sid .x-side__id { max-height: 190px; opacity: 1; transition: max-height 620ms cubic-bezier(0.22, 1, 0.36, 1), margin-bottom 620ms cubic-bezier(0.22, 1, 0.36, 1), opacity 420ms ease 80ms, visibility 0s linear 0s; }
+        .x-sid .x-side__id > * { transition: opacity 520ms ease, transform 620ms cubic-bezier(0.22, 1, 0.36, 1), filter 520ms ease; }
+        .x-sid .x-side__id .x-side__avatar { transition-delay: 60ms; }
+        .x-sid .x-side__id .x-label { transition-delay: 140ms; }
+        .x-sid .x-side__id .x-side__name { transition: opacity 520ms ease 210ms, transform 620ms cubic-bezier(0.22, 1, 0.36, 1) 210ms, filter 520ms ease 210ms; }
+        .x-sid .x-side__id > div { transition: none; }
+        .x-sid .x-side__id .x-label { transition: opacity 520ms ease 140ms, transform 620ms cubic-bezier(0.22, 1, 0.36, 1) 140ms, filter 520ms ease 140ms; }
+        .x-sid.is-id-off .x-side__id { max-height: 0; margin-bottom: -22px; opacity: 0; visibility: hidden; transition: max-height 520ms cubic-bezier(0.22, 1, 0.36, 1) 120ms, margin-bottom 520ms cubic-bezier(0.22, 1, 0.36, 1) 120ms, opacity 320ms ease, visibility 0s linear 640ms; }
+        .x-sid.is-id-off .x-side__id .x-side__avatar { opacity: 0; transform: scale(0.82) translateY(10px); filter: blur(6px); transition-delay: 0ms; }
+        .x-sid.is-id-off .x-side__id .x-label, .x-sid.is-id-off .x-side__id .x-side__name { opacity: 0; transform: translateY(12px); filter: blur(4px); transition-delay: 0ms; }
         .x-sid.is-id-anim .x-side__id { overflow: clip; overflow-clip-margin: 48px; }
-        .x-sid.is-id-still .x-side__id { transition: none; }
+        .x-sid.is-id-still .x-side__id, .x-sid.is-id-still .x-side__id > *, .x-sid.is-id-still .x-side__id .x-label, .x-sid.is-id-still .x-side__id .x-side__name { transition: none; }
       }
       /* Sidebar nav: one accent indicator that slides to the active or hovered link */
       .x-side__nav { position: relative; }
@@ -419,6 +427,7 @@
 
       @media (prefers-reduced-motion: reduce) {
         .x-sid .x-side__id, .x-sid.is-id-off .x-side__id { transition: none; transform: none; }
+        .x-sid .x-side__id > *, .x-sid .x-side__id .x-label, .x-sid .x-side__id .x-side__name, .x-sid.is-id-off .x-side__id .x-side__avatar, .x-sid.is-id-off .x-side__id .x-label, .x-sid.is-id-off .x-side__id .x-side__name { transition: none; transform: none; filter: none; }
         .x-side__nav.x-ind .x-side__ind, .x-side__nav a, .x-pill, .x-filters button, .x-turn .btn, .x-icon__disc, .x-kit__logo, .x-row::before, .x-row__shot { transition: none; }
         .x-side__nav a:active, .x-pill:active, .x-filters button:active, .x-cta:active > .x-pill, .x-arrow:active, .x-turn .btn:active, .x-icon:active .x-icon__disc, .x-icon:hover .x-icon__disc, .x-row:hover .x-row__shot { transform: none; }
         .x-ripple { display: none; }
